@@ -100,7 +100,7 @@ jobs:
           git config --global user.name "auto-bot"
           git config --global user.email "auto@bot.com"
 
-          git add data/*.json progress.json || true
+          git add data/*.json || true
 
           if git diff --staged --quiet; then
             echo "No changes"
