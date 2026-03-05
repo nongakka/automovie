@@ -74,6 +74,7 @@ jobs:
 
       - name: Update Categories
         run: node update-categories.js
+
 # -------------------------------
 # RUN SCRAPER
 # -------------------------------
@@ -85,7 +86,7 @@ jobs:
 
           echo "RUN CATEGORY: $CATEGORY"
 
-          node update.js $CATEGORY | tee output.txt
+          node update.js "$CATEGORY" | tee output.txt
 
           if grep -q "SCRAPER_STATUS:IN_PROGRESS" output.txt; then
             echo "continue=true" >> $GITHUB_OUTPUT
@@ -117,26 +118,16 @@ jobs:
             done
           fi
 
-      # -------------------------------
-# INSTALL GH CLI
-# -------------------------------
-      - name: Install GitHub CLI
-        if: steps.scraper.outputs.continue == 'true'
-        run: |
-          sudo apt update
-          sudo apt install gh -y
-
 
 # -------------------------------
 # TRIGGER NEXT RUN
 # -------------------------------
       - name: Trigger Next Run
         if: steps.scraper.outputs.continue == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
 
           echo "Trigger next workflow..."
 
           gh workflow run matrix.yml
-
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
