@@ -3,10 +3,18 @@ const cheerio = require("cheerio");
 const fs = require("fs");
 
 const BASE = "https://goseries4k.com";
-const CATEGORY = process.env.CATEGORY || "goseries";
+const CATEGORY = process.argv[2] || "goseries";
 const MAX_PAGE = 5;
 
 const DATA_FILE = `data/${CATEGORY}.json`;
+
+const categories = require("./data/categories.json");
+const cat = categories.find(c => c.slug === CATEGORY);
+
+if (!cat) {
+  console.log("ไม่พบหมวด", CATEGORY);
+  process.exit(1);
+}
 
 let results = [];
 
