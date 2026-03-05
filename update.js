@@ -103,22 +103,27 @@ async function scrape() {
 
   console.log("หน้า", page);
   console.log("URL", url);
-
+  console.log("พบโพสต์:", movies.length);
+  
   const html = await fetchPage(url);
   if (!html) continue;
 
     const $ = cheerio.load(html);
 
-    const movies = $(".movie, article, .movie-item, .grid-item");
-
+    const movies = $("article");
+    
 for (let i = 0; i < movies.length; i++) {
 
   const el = movies[i];
 
   const img = $(el).find("img");
   const title = img.attr("alt") || img.attr("title") || "no-title";
-  const image = img.attr("src") || img.attr("data-src");
-  const link = $(el).find("a").attr("href");
+  const image =
+  img.attr("src") ||
+  img.attr("data-src") ||
+  img.attr("data-lazy-src") ||
+  "";
+  const link = $(el).find("a").first().attr("href");
 
   if (!link) continue;
 
