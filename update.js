@@ -4,7 +4,7 @@ const fs = require("fs");
 const { URL } = require("url");
 const { execSync } = require("child_process");
 
-const categories = JSON.parse(fs.readFileSync("categories.json"));
+const categories = JSON.parse(fs.readFileSync("data/categories.json"));
 
 // ==========================
 // รับชื่อหมวดจาก command line
