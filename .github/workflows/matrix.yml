@@ -72,7 +72,8 @@ jobs:
       - name: Install
         run: npm ci
 
-
+      - name: Update Categories
+        run: node update-categories.js
 # -------------------------------
 # RUN SCRAPER
 # -------------------------------
