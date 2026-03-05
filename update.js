@@ -31,6 +31,7 @@ async function fetchPage(url) {
       headers: {
         "User-Agent": "Mozilla/5.0"
       },
+      timeout: 15000,
       validateStatus: () => true
     });
 
@@ -90,7 +91,7 @@ async function scrape() {
 
   for (let page = 1; page <= MAX_PAGE; page++) {
 
-  const url = `${cat.url}page/${page}/`;
+  const url = `${cat.url}/page/${page}/`;
 
   console.log("หน้า", page);
   console.log("URL", url);
@@ -123,8 +124,9 @@ for (let i = 0; i < movies.length; i++) {
   const detail = await scrapeDetail(link);
 
   if (!detail) {
-    console.log("ดึง detail ไม่ได้", title);
-  }
+  console.log("ดึง detail ไม่ได้", title);
+  continue;
+}
 
   results.push({
     title,
