@@ -34,7 +34,7 @@ jobs:
         run: |
 
           MATRIX=$(node -e "
-          const cats=require('./categories.json');
+          const cats=require('./data/categories.json');
           console.log(JSON.stringify({
             category: cats.map(c=>c.slug)
           }));
