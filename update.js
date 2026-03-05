@@ -22,17 +22,30 @@ if (fs.existsSync(DATA_FILE)) {
   results = JSON.parse(fs.readFileSync(DATA_FILE));
 }
 
+const exists = new Set(results.map(m => m.link));
+
 async function fetchPage(url) {
   try {
+
     const res = await axios.get(url, {
       headers: {
         "User-Agent": "Mozilla/5.0"
-      }
+      },
+      validateStatus: () => true
     });
+
+    if (res.status !== 200) {
+      console.log("HTTP ERROR", res.status, url);
+      return null;
+    }
+
     return res.data;
+
   } catch (err) {
+
     console.log("โหลดหน้าไม่ได้", url);
     return null;
+
   }
 }
 
@@ -87,37 +100,44 @@ async function scrape() {
 
     const $ = cheerio.load(html);
 
-    const movies = $("article, .movie-item, .grid-item");
+    const movies = $(".movie, article, .movie-item, .grid-item");
 
-    for (let i = 0; i < movies.length; i++) {
+for (let i = 0; i < movies.length; i++) {
 
-      const el = movies[i];
+  const el = movies[i];
 
-      const title = $(el).find("img").attr("alt");
-      const link = $(el).find("a").attr("href");
-      const image = $(el).find("img").attr("src");
+  const img = $(el).find("img");
+  const title = img.attr("alt") || img.attr("title") || "no-title";
+  const image = img.attr("src") || img.attr("data-src");
+  const link = $(el).find("a").attr("href");
 
-      if (!link) continue;
+  if (!link) continue;
 
-      if (results.find(m => m.link === link)) {
-        console.log("มีแล้ว", title);
-        continue;
-      }
+  if (exists.has(link)) {
+    console.log("มีแล้ว", title);
+    continue;
+  }
 
-      console.log("กำลังดึง", title);
+  console.log("กำลังดึง", title);
 
-      const detail = await scrapeDetail(link);
+  const detail = await scrapeDetail(link);
 
-      results.push({
-        title,
-        link,
-        image,
-        episodes: detail?.episodes || [],
-        servers: detail?.servers || []
-      });
+  if (!detail) {
+    console.log("ดึง detail ไม่ได้", title);
+  }
 
-      fs.writeFileSync(DATA_FILE, JSON.stringify(results, null, 2));
-    }
+  results.push({
+    title,
+    link,
+    image,
+    episodes: detail?.episodes || [],
+    servers: detail?.servers || []
+  });
+
+  exists.add(link);
+
+  fs.writeFileSync(DATA_FILE, JSON.stringify(results, null, 2));
+}
   }
 
   console.log("เสร็จทั้งหมด", results.length);
