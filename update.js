@@ -86,7 +86,7 @@ async function scrape() {
 
     const $ = cheerio.load(html);
 
-    const movies = $(".movie");
+    const movies = $("article, .movie-item, .grid-item");
 
     for (let i = 0; i < movies.length; i++) {
 
