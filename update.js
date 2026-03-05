@@ -91,7 +91,15 @@ async function scrape() {
 
   for (let page = 1; page <= MAX_PAGE; page++) {
 
-  const url = `${cat.url}/page/${page}/`;
+  const baseUrl = cat.url.replace(/\/$/, "");
+
+  let url;
+
+  if (page === 1) {
+    url = `${baseUrl}/`;
+  } else {
+    url = `${baseUrl}/page/${page}/`;
+  }
 
   console.log("หน้า", page);
   console.log("URL", url);
