@@ -4,41 +4,46 @@ const fs = require("fs");
 
 async function run() {
 
-  const url = "https://goseries4k.com/category/";
+  const url = "https://goseries4k.com/";
 
-  const { data } = await axios.get(url);
+  const res = await axios.get(url, {
+    headers: {
+      "User-Agent":
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36"
+    }
+  });
 
-  const $ = cheerio.load(data);
+  const $ = cheerio.load(res.data);
 
   const categories = [];
 
-  $(".cat-item a").each((i, el) => {
+  $("a").each((i, el) => {
 
-    const name = $(el).text().trim();
     const link = $(el).attr("href");
+    const name = $(el).text().trim();
 
-    if (!link.includes("category")) return;
+    if (!link) return;
 
-    const slug = link
-      .split("/category/")[1]
-      .replace(/\//g, "")
-      .replace(/%/g,"")
-      .toLowerCase();
+    if (link.includes("/category/")) {
 
-    categories.push({
-      name,
-      slug,
-      url: link
-    });
+      const slug = link.split("/category/")[1].replace(/\//g,"");
+
+      categories.push({
+        name,
+        slug,
+        url: link
+      });
+
+    }
 
   });
 
   fs.writeFileSync(
-    "data/categories.json",
+    "./data/categories.json",
     JSON.stringify(categories, null, 2)
   );
 
-  console.log("Categories:", categories.length);
+  console.log("saved", categories.length);
 }
 
 run();
