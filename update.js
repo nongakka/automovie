@@ -77,12 +77,13 @@ async function scrape() {
 
   for (let page = 1; page <= MAX_PAGE; page++) {
 
-    const url = `${BASE}/category/${CATEGORY}/page/${page}`;
+  const url = `${cat.url}page/${page}/`;
 
-    console.log("หน้า", page);
+  console.log("หน้า", page);
+  console.log("URL", url);
 
-    const html = await fetchPage(url);
-    if (!html) continue;
+  const html = await fetchPage(url);
+  if (!html) continue;
 
     const $ = cheerio.load(html);
 
