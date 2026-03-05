@@ -2,7 +2,6 @@ const axios = require("axios");
 const cheerio = require("cheerio");
 const fs = require("fs");
 
-const BASE = "https://goseries4k.com";
 const CATEGORY = process.argv[2] || "goseries";
 const MAX_PAGE = 5;
 
@@ -25,20 +24,22 @@ if (fs.existsSync(DATA_FILE)) {
 const exists = new Set(results.map(m => m.link));
 
 async function fetchPage(url) {
+
   try {
 
     const res = await axios.get(url, {
       headers: {
-  "User-Agent":
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36",
-  "Accept-Language": "en-US,en;q=0.9"
-},
+        "User-Agent":
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36",
+        "Accept-Language": "th-TH,th;q=0.9,en;q=0.8",
+        "Referer": "https://goseries4k.com/"
+      },
       timeout: 15000,
       validateStatus: () => true
     });
 
     if (res.status !== 200) {
-      console.log("HTTP ERROR", res.status, url);
+      console.log("HTTP", res.status, url);
       return null;
     }
 
@@ -50,9 +51,11 @@ async function fetchPage(url) {
     return null;
 
   }
+
 }
 
 async function scrapeDetail(link) {
+
   const html = await fetchPage(link);
   if (!html) return null;
 
@@ -61,7 +64,9 @@ async function scrapeDetail(link) {
   const title = $("h1").first().text().trim();
 
   const episodes = [];
+
   $(".mp-ep-btn").each((i, el) => {
+
     const epTitle = $(el).text().trim();
     const epId = $(el).attr("data-id");
 
@@ -69,16 +74,20 @@ async function scrapeDetail(link) {
       episode: epTitle,
       id: epId
     });
+
   });
 
   const servers = [];
+
   $(".mp-s-sl").each((i, el) => {
+
     const url = $(el).attr("data-id");
 
     servers.push({
       server: i + 1,
       url
     });
+
   });
 
   return {
@@ -87,78 +96,97 @@ async function scrapeDetail(link) {
     episodes,
     servers
   };
+
 }
 
 async function scrape() {
 
-  for (let page = 1; page <= MAX_PAGE; page++) {
-
   const baseUrl = cat.url.replace(/\/$/, "");
 
-  let url;
+  for (let page = 1; page <= MAX_PAGE; page++) {
 
-  if (page === 1) {
-    url = `${baseUrl}/`;
-  } else {
-    url = `${baseUrl}/page/${page}/`;
-  }
+    let url;
 
-  console.log("หน้า", page);
-  console.log("URL", url);
+    if (page === 1) {
+      url = `${baseUrl}/`;
+    } else {
+      url = `${baseUrl}/page/${page}/`;
+    }
 
-  const html = await fetchPage(url);
-  if (!html) continue;
+    console.log("หน้า", page);
+    console.log("URL", url);
 
-  const $ = cheerio.load(html);
+    const html = await fetchPage(url);
 
-  const movies = $("article");
+    if (!html) {
+      console.log("ไม่มีหน้าแล้ว หยุด");
+      break;
+    }
 
-  console.log("พบโพสต์:", movies.length);
-    
-  for (let i = 0; i < movies.length; i++) {
+    const $ = cheerio.load(html);
 
-  const el = movies[i];
+    const movies = $("article");
 
-  const img = $(el).find("img").first();
-  const title = img.attr("alt") || img.attr("title") || "no-title";
-  const image =
-  img.attr("src") ||
-  img.attr("data-src") ||
-  img.attr("data-lazy-src") ||
-  "";
-  const link = $(el).find("a").first().attr("href")?.trim();
+    console.log("พบโพสต์:", movies.length);
 
-  if (!link) continue;
+    if (movies.length === 0) {
+      console.log("ไม่มีโพสต์ หยุด");
+      break;
+    }
 
-  if (exists.has(link)) {
-    console.log("มีแล้ว", title);
-    continue;
-  }
+    for (let i = 0; i < movies.length; i++) {
 
-  console.log("กำลังดึง", title);
+      const el = movies[i];
 
-  const detail = await scrapeDetail(link);
+      const img = $(el).find("img").first();
 
-  if (!detail) {
-  console.log("ดึง detail ไม่ได้", title);
-  continue;
-  }
+      const title =
+        img.attr("alt") ||
+        img.attr("title") ||
+        "no-title";
 
-  results.push({
-    title,
-    link,
-    image,
-    episodes: detail?.episodes || [],
-    servers: detail?.servers || []
-  });
+      const image =
+        img.attr("src") ||
+        img.attr("data-src") ||
+        img.attr("data-lazy-src") ||
+        "";
 
-  exists.add(link);
+      const link = $(el).find("a").first().attr("href")?.trim();
 
-  fs.writeFileSync(DATA_FILE, JSON.stringify(results, null, 2));
-  }
+      if (!link) continue;
+
+      if (exists.has(link)) {
+        console.log("มีแล้ว", title);
+        continue;
+      }
+
+      console.log("กำลังดึง", title);
+
+      const detail = await scrapeDetail(link);
+
+      if (!detail) {
+        console.log("ดึง detail ไม่ได้", title);
+        continue;
+      }
+
+      results.push({
+        title,
+        link,
+        image,
+        episodes: detail.episodes || [],
+        servers: detail.servers || []
+      });
+
+      exists.add(link);
+
+      fs.writeFileSync(DATA_FILE, JSON.stringify(results, null, 2));
+
+    }
+
   }
 
   console.log("เสร็จทั้งหมด", results.length);
+
 }
 
 scrape();
