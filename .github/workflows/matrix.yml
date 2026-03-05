@@ -79,11 +79,13 @@ jobs:
 # -------------------------------
       - name: Run Scraper
         id: scraper
+        env:
+          CATEGORY: ${{ matrix.category }}
         run: |
 
-          echo "RUN CATEGORY: ${{ matrix.category }}"
+          echo "RUN CATEGORY: $CATEGORY"
 
-          node update.js ${{ matrix.category }} | tee output.txt
+          node update.js $CATEGORY | tee output.txt
 
           if grep -q "SCRAPER_STATUS:IN_PROGRESS" output.txt; then
             echo "continue=true" >> $GITHUB_OUTPUT
@@ -101,7 +103,7 @@ jobs:
           git config --global user.name "auto-bot"
           git config --global user.email "auto@bot.com"
 
-          git add data/*.json || true
+          git add data/*.json data/categories.json || true
 
           if git diff --staged --quiet; then
             echo "No changes"
@@ -114,6 +116,15 @@ jobs:
               sleep 5
             done
           fi
+
+      # -------------------------------
+# INSTALL GH CLI
+# -------------------------------
+      - name: Install GitHub CLI
+        if: steps.scraper.outputs.continue == 'true'
+        run: |
+          sudo apt update
+          sudo apt install gh -y
 
 
 # -------------------------------
