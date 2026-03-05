@@ -29,8 +29,10 @@ async function fetchPage(url) {
 
     const res = await axios.get(url, {
       headers: {
-        "User-Agent": "Mozilla/5.0"
-      },
+  "User-Agent":
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36",
+  "Accept-Language": "en-US,en;q=0.9"
+}
       timeout: 15000,
       validateStatus: () => true
     });
@@ -103,27 +105,28 @@ async function scrape() {
 
   console.log("หน้า", page);
   console.log("URL", url);
-  console.log("พบโพสต์:", movies.length);
-  
+
   const html = await fetchPage(url);
   if (!html) continue;
 
-    const $ = cheerio.load(html);
+  const $ = cheerio.load(html);
 
-    const movies = $("article");
+  const movies = $("article");
+
+  console.log("พบโพสต์:", movies.length);
     
-for (let i = 0; i < movies.length; i++) {
+  for (let i = 0; i < movies.length; i++) {
 
   const el = movies[i];
 
-  const img = $(el).find("img");
+  const img = $(el).find("img").first();
   const title = img.attr("alt") || img.attr("title") || "no-title";
   const image =
   img.attr("src") ||
   img.attr("data-src") ||
   img.attr("data-lazy-src") ||
   "";
-  const link = $(el).find("a").first().attr("href");
+  const link = $(el).find("a").first().attr("href")?.trim();
 
   if (!link) continue;
 
@@ -139,7 +142,7 @@ for (let i = 0; i < movies.length; i++) {
   if (!detail) {
   console.log("ดึง detail ไม่ได้", title);
   continue;
-}
+  }
 
   results.push({
     title,
@@ -152,7 +155,7 @@ for (let i = 0; i < movies.length; i++) {
   exists.add(link);
 
   fs.writeFileSync(DATA_FILE, JSON.stringify(results, null, 2));
-}
+  }
   }
 
   console.log("เสร็จทั้งหมด", results.length);
