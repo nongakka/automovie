@@ -85,7 +85,7 @@ jobs:
 
           echo "RUN CATEGORY: $CATEGORY"
 
-          node update.js $CATEGORY | tee output.txt
+          node update.js goseries2026 | tee output.txt
 
           if grep -q "SCRAPER_STATUS:IN_PROGRESS" output.txt; then
             echo "continue=true" >> $GITHUB_OUTPUT
