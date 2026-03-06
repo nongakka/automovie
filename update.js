@@ -211,57 +211,29 @@ const res = await client.post(
 
   async getServers(epUrl){
 
-  const { data } = await fetchWithRetry(epUrl);
-  const $ = cheerio.load(data);
+    const servers = [];
 
-  let servers = [];
-
-  const iframes = $("iframe");
-
-  if(iframes.length === 0){
-    console.log("⚠️ ไม่พบ iframe");
-    return servers;
-  }
-
-  for(let i=0;i<iframes.length;i++){
-
-    let src = $(iframes[i]).attr("src");
-
-    if(!src) continue;
-
-    if(src.startsWith("//")){
-      src = "https:" + src;
-    }
-
-    let stream = null;
-
-    try{
-
-      const { data: playerHtml } =
-        await fetchWithRetry(src);
-
-      const m3u8Match =
-        playerHtml.match(/https?:\/\/[^"' ]+\.m3u8[^"' ]*/);
-
-      if(m3u8Match){
-        stream = m3u8Match[0];
-      }
-
-    }catch(err){
-      console.log("⚠️ player load error");
-    }
-
-    servers.push({
-      name:`Server ${i+1}`,
-      iframe:src,
-      stream:stream
+    const res = await axios.get(epUrl,{
+      headers:{ "User-Agent":"Mozilla/5.0" }
     });
 
+    const $ = cheerio.load(res.data);
+
+    const iframe = $("iframe").attr("src");
+
+    console.log("🎥 player:", iframe);
+    
+    if(iframe){
+      servers.push({
+        name:"embed",
+        url:iframe
+      });
+    }
+
+    return servers;
+
   }
 
-  return servers;
-
-}
 },
 };
 
