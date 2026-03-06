@@ -154,12 +154,19 @@ function autoDetect($, selectors) {
 }
 
 function extractBasicInfo($, el) {
+
+  const img = $(el).find("img").first();
+
   const title =
+    img.attr("alt") ||
+    img.attr("title") ||
     $(el).find(".entry-title,.title,h2,h3").first().text().trim();
 
-  const link=$(el).find("a").attr("href");
-  const image=$(el).find("img").attr("data-src")||
-               $(el).find("img").attr("src");
+  const link = $(el).find("a[href]").first().attr("href");
+
+  const image =
+    img.attr("data-src") ||
+    img.attr("src");
 
   return { title, link, image };
 }
