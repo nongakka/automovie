@@ -172,7 +172,7 @@ function extractBasicInfo($, el) {
   const title =
     $(el).find(".entry-title,.title,h2,h3").first().text().trim();
 
-  const link=$(el).find("a").attr("href");
+  const link=$(el).find("a").first().attr("href");
   const image=$(el).find("img").attr("data-src")||
                $(el).find("img").attr("src");
 
@@ -348,13 +348,19 @@ for (let page = startPage; page <= 999; page++) {
 
   let pageSuccess = false;
 
+  let pageUrl;
   try {
 
-  const pageUrl =
-    page === 1 ? cat.url : `${cat.url}/page/${page}`;
-  console.log("🌐 URL:", pageUrl);
+ 
+
+  if (page === 1) {
+    pageUrl = new URL(cat.url).href;
+  } else {
+    pageUrl = new URL(`page/${page}/`, cat.url).href;
+  }
+      console.log("🌐 URL:", pageUrl);
   const { data: catHtml } =
-    await fetchWithRetry(encodeURI(pageUrl));
+    await fetchWithRetry(pageUrl);
 
     const $cat = cheerio.load(catHtml);
 
@@ -423,7 +429,13 @@ for (let page = startPage; page <= 999; page++) {
         const $a = $detail(el2);
 
         let epLink = normalizeUrl($a.attr("href"));
-        if (!epLink || !epLink.includes("series-days.com")) continue;
+        if (!epLink) continue;
+
+        if (epLink.startsWith("/")) {
+            epLink = new URL(epLink, cat.url).href;
+        }
+
+        if (!epLink.includes(getDomain(cat.url))) continue;
 
         if (movie.episodes.find(x => x.link === epLink)) {
           console.log("⛔ ตอนซ้ำ หยุดเรื่อง");
@@ -438,8 +450,8 @@ for (let page = startPage; page <= 999; page++) {
 
         try {
           servers = await siteHandler.getServers(epLink);
-        catch (err) {
-          console.log("⚠️ ข้ามหน้า", page);
+        } catch (err) {
+          console.log("⚠️ server error:", epLink);
           console.log(err.response?.status || err.message);
         }
 
@@ -469,11 +481,15 @@ for (let page = startPage; page <= 999; page++) {
 
     pageSuccess = true;
 
-  } catch (err) {
+  } 
+  
+  catch (err) {
 
-    console.log("⚠️ ข้ามหน้า", page);
+  console.log("⚠️ ข้ามหน้า", page);
+  console.log("URL:", pageUrl);
+  console.log(err.response?.status || err.message);
 
-  }
+}
 
   if (pageSuccess) {
 
