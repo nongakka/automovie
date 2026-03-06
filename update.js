@@ -209,90 +209,58 @@ const res = await client.post(
     "select[name='Sequel_select'] option"
   ],
 
-  async getServers(epUrl) {
+  async getServers(epUrl){
 
-    const { data } = await fetchWithRetry(epUrl);
-    const $ = cheerio.load(data);
+  const { data } = await fetchWithRetry(epUrl);
+  const $ = cheerio.load(data);
 
-    let servers = [];
+  let servers = [];
 
-    const buttons = $(".halim-btn");
+  const iframes = $("iframe");
 
-    if (buttons.length === 0) {
-      console.log("⚠️ ไม่พบ halim-btn");
-      return servers;
-    }
-
-    const postId = buttons.first().attr("data-post-id");
-
-    for (let i = 0; i < buttons.length; i++) {
-
-      const btn = buttons.eq(i);
-
-      const server = btn.attr("data-server");
-      const episode = btn.attr("data-episode");
-      
-      if (!server || !episode) continue;
-
-      try {
-
-        const res = await client.post(
-          "https://www.series-days.com/wp-admin/admin-ajax.php",
-          new URLSearchParams({
-            action: "halim_ajax_player",
-            post_id: postId,
-            server: server,
-            episode: episode
-          }),
-          {
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-            "X-Requested-With": "XMLHttpRequest",
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
-            "Referer": epUrl,
-            "Origin": "https://www.series-days.com",
-            "Accept": "*/*"
-        }
-          }
-        );
-
-        const $$ = cheerio.load(res.data);
-
-        $$("iframe").each((j, el) => {
-
-          let src = $$(el).attr("src");
-
-          if (!src) return;
-
-          if (src.startsWith("//")) {
-            src = "https:" + src;
-          }
-
-          servers.push({
-            name: `Server ${j + 1}`,
-            url: src
-          });
-
-        });
-
-}catch (err) {
-
-  console.log("⚠️ ajax error", server);
-
-  if(err.response){
-    console.log("status:", err.response.status);
-    console.log("data:", err.response.data?.slice(0,200));
-  }else{
-    console.log(err.message);
-  }
-
-}
-
-    }
-
+  if(iframes.length === 0){
+    console.log("⚠️ ไม่พบ iframe");
     return servers;
+  }
+
+  for(let i=0;i<iframes.length;i++){
+
+    let src = $(iframes[i]).attr("src");
+
+    if(!src) continue;
+
+    if(src.startsWith("//")){
+      src = "https:" + src;
+    }
+
+    let stream = null;
+
+    try{
+
+      const { data: playerHtml } =
+        await fetchWithRetry(src);
+
+      const m3u8Match =
+        playerHtml.match(/https?:\/\/[^"' ]+\.m3u8[^"' ]*/);
+
+      if(m3u8Match){
+        stream = m3u8Match[0];
+      }
+
+    }catch(err){
+      console.log("⚠️ player load error");
+    }
+
+    servers.push({
+      name:`Server ${i+1}`,
+      iframe:src,
+      stream:stream
+    });
 
   }
+
+  return servers;
+
 }
 
 };
