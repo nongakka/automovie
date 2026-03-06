@@ -401,7 +401,7 @@ let startPage = 1;
 
 if (fs.existsSync(progressFile)) {
 
-  const saved = JSON.parse(fs.readFileSync(progressFile));
+  const saved = JSON.parse(fs.readFileSync(progressFile,"utf8"));
   startPage = saved.page || 1;
 
   console.log("🔁 Resume จากหน้า", startPage);
@@ -615,7 +615,13 @@ for (let page = startPage; page <= 999; page++) {
 
       if($a.text().includes("เลือก")) continue;
 
-        let epLink = $a.attr("href") || link;
+        let epLink = $a.attr("href");
+
+        if(!epLink){
+          const val = $a.attr("value");
+          if(val) epLink = link + "#ep-" + val;
+        }
+
         if(!epLink) continue;
 
         epLink = normalizeUrl(epLink);
