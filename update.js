@@ -81,83 +81,28 @@ const SiteHandlers = {
       "article",".movie-item",".post",".item",".anime-item",".-movie"
     ],
     episodeSelectors: [
-      ".mp-ep-btn",
-      "ul#MVP li",
-      ".episode-list a",
-      ".episodes a"
-    ],   
+      "ul#MVP li a",".episode-list a",".ep a",".episodes a",".mp-ep-btn"
+    ],
+    async getServers(epUrl) {
+      const { data } = await fetchWithRetry(epUrl);
+      const $ = cheerio.load(data);
 
-async getServers(epUrl) {
+      let servers = [];
 
-  const { data } = await fetchWithRetry(epUrl);
-  const $ = cheerio.load(data);
+      const main =
+        $("div.mpIframe iframe").attr("data-src") ||
+        $("div.mpIframe iframe").attr("src");
 
-  let servers = [];
+      if (main) servers.push({ name:"Main", url:main });
 
-  // iframe หลัก
-  const main =
-    $("div.mpIframe iframe").attr("data-src") ||
-    $("div.mpIframe iframe").attr("src");
-
-  if (main) {
-    servers.push({
-      name: "Main",
-      url: main
-    });
-  }
-
-  // server list
-  const serverButtons = $(".toolbar-item.mp-s-sl");
-
-  for (let i = 0; i < serverButtons.length; i++) {
-
-    const el = serverButtons[i];
-
-    const name =
-      $(el).find(".item-text").text().trim() ||
-      `Player ${i+1}`;
-
-    const id = $(el).attr("data-id");
-
-    if (!id) continue;
-
-    const serverPage = `https://goseries4k.com/ajax/server/${id}`;
-
-    try {
-
-    const { data: serverHtml } =
-      await client.get(serverPage,{
-        headers:{
-          "X-Requested-With":"XMLHttpRequest",
-          "Referer":epUrl
-        }
+      $(".toolbar-item.mp-s-sl").each((i,el)=>{
+        const name=$(el).find(".item-text").text().trim();
+        const id=$(el).attr("data-id");
+        if (id) servers.push({ name:name||`Player ${i+1}`, url:id });
       });
 
-      const $server = cheerio.load(serverHtml);
-
-      const iframe =
-        $server("iframe").attr("src") ||
-        $server("iframe").attr("data-src");
-
-      if (iframe) {
-
-        servers.push({
-          name,
-          url: iframe
-        });
-
-      }
-
-    } catch (err) {
-
-      console.log("⚠️ server error:", id);
-
+      return servers;
     }
-
-  }
-
-  return servers;
-}
   },
 
   // ======================
@@ -209,19 +154,12 @@ function autoDetect($, selectors) {
 }
 
 function extractBasicInfo($, el) {
-
-  const img = $(el).find("img").first();
-
   const title =
-    img.attr("alt") ||
-    img.attr("title") ||
     $(el).find(".entry-title,.title,h2,h3").first().text().trim();
 
-  const link = $(el).find("a[href]").first().attr("href");
-
-  const image =
-    img.attr("data-src") ||
-    img.attr("src");
+  const link=$(el).find("a").attr("href");
+  const image=$(el).find("img").attr("data-src")||
+               $(el).find("img").attr("src");
 
   return { title, link, image };
 }
@@ -369,7 +307,6 @@ function saveWithSizeCheck(){
 const handler = getHandler(cat.url);
 let finished = false;
 let episodeCounter = 0;
-let emptyPageCount = 0; // ⭐ เพิ่มบรรทัดนี้
 
 //save auto
 setInterval(()=>{
@@ -384,7 +321,7 @@ setInterval(()=>{
 
 //LOOP
 
-for (let page = startPage; page <= 150; page++) {
+for (let page = startPage; page <= 999; page++) {
 
   // ⭐ เพิ่มตรงนี้
   fs.writeFileSync(
@@ -408,26 +345,17 @@ for (let page = startPage; page <= 150; page++) {
 
     if (articles.length === 0) {
 
-  emptyPageCount++;
+      console.log("ไม่มีข้อมูลแล้ว");
 
-  console.log(`⚠️ หน้าว่าง ${emptyPageCount}/3`);
+      finished = true;
 
-  if (emptyPageCount >= 3) {
+      fs.writeFileSync(
+        progressFile,
+        JSON.stringify({ page: page })
+      );
 
-    console.log("🛑 เจอหน้าว่าง 3 หน้า หยุด");
-
-    finished = true;
-
-    break;
-
-  }
-
-  continue;
-} else {
-
-  emptyPageCount = 0;
-
-}
+      break;
+    }
 
     for (const el of articles) {
 
@@ -438,8 +366,14 @@ for (let page = startPage; page <= 150; page++) {
       if (!link) continue;
 
       // ⭐ เพิ่มตรงนี้
+      if (oldMap.has(link)) {
+        console.log("🌐 ซ้ำข้ามหมวด:", basic.title);
+        continue;
+      }
+
       let movie = oldMap.get(link);
       
+
       if (movie && movie.episodes && movie.episodes.length > 0) {
         console.log("⏭ ข้ามเรื่อง (มีแล้ว):", movie.title);
         continue;
@@ -466,31 +400,11 @@ for (let page = startPage; page <= 150; page++) {
       const epElements =
         autoDetect($detail, handler.episodeSelectors).toArray();
 
-  for (const el2 of epElements) {
+      for (const el2 of epElements) {
 
-    let $a = $detail(el2);
+        const $a = $detail(el2);
 
-    if (!$a.is("a")) {
-        $a = $a.find("a").first();
-    }
-
-    if (!$a.length) continue;
-
-    let epLink =
-      normalizeUrl($a.attr("href")) ||
-      normalizeUrl($a.attr("data-src"));
-
-    console.log("↳ ดึงตอน:", $a.text().trim());
-    console.log("🔗 link:", epLink);
-
-      const dataId = $a.attr("data-id");
-
-      if (!epLink && dataId) {
-        epLink = normalizeUrl(
-          `https://goseries4k.com/?episode=${dataId}`
-        );
-      }
-
+        let epLink = normalizeUrl($a.attr("href"));
         if (!epLink) continue;
 
         if (movie.episodes.find(x => x.link === epLink)) {
