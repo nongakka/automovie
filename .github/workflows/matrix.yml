@@ -64,10 +64,6 @@ jobs:
       - name: Install
         run: npm ci
 
-      - name: Update Categories
-        run: node update-categories.js
-
-
       - name: Run Scraper
         id: scraper
         env:
