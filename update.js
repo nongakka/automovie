@@ -214,53 +214,69 @@ default: {
 
     let servers = [];
 
-    let iframe =
-      $("iframe").attr("data-src") ||
-      $("iframe").attr("data-lazy-src") ||
-      $("iframe").attr("src");
+    const buttons = $(".halim-btn");
 
-    if (!iframe) {
-      console.log("⚠️ ไม่พบ iframe");
+    if (buttons.length === 0) {
+      console.log("⚠️ ไม่พบ halim-btn");
       return servers;
     }
 
-    if (iframe.startsWith("//")) {
-      iframe = "https:" + iframe;
-    }
+    const postId = buttons.first().attr("data-post-id");
 
-    console.log("🎥 iframe:", iframe);
+    for (let i = 0; i < buttons.length; i++) {
 
-    try {
+      const btn = buttons.eq(i);
 
-      const { data: playerHtml } =
-        await fetchWithRetry(iframe);
+      const server = btn.attr("data-server");
+      const episode = btn.attr("data-episode");
+      const name = btn.text().trim();
 
-      const $$ = cheerio.load(playerHtml);
+      if (!server || !episode) continue;
 
-      $$("script").each((i, el) => {
+      try {
 
-        const txt = $$(el).html() || "";
+        const res = await axios.post(
+          "https://www.series-days.com/wp-admin/admin-ajax.php",
+          new URLSearchParams({
+            action: "halim_ajax_player",
+            post_id: postId,
+            server: server,
+            episode: episode
+          }),
+          {
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+              "X-Requested-With": "XMLHttpRequest",
+              "User-Agent": "Mozilla/5.0",
+              "Referer": epUrl
+            }
+          }
+        );
 
-        const match = txt.match(/https?:\/\/[^"]+\.m3u8/g);
+        const $$ = cheerio.load(res.data);
 
-        if (match) {
+        $$("iframe").each((j, el) => {
 
-          match.forEach(m3u8 => {
+          let src = $$(el).attr("src");
 
-            servers.push({
-              name: "M3U8",
-              url: m3u8
-            });
+          if (!src) return;
 
+          if (src.startsWith("//")) {
+            src = "https:" + src;
+          }
+
+          servers.push({
+            name: name || `Server ${j + 1}`,
+            url: src
           });
 
-        }
+        });
 
-      });
+      } catch (err) {
 
-    } catch (err) {
+        console.log("⚠️ ajax error", server);
 
-      console.log("⚠️ player error");
+      }
 
     }
 
