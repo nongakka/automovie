@@ -87,7 +87,9 @@ const SiteHandlers = {
       ".episodes a",
       ".mp-ep-btn",
       ".mp-ep-btn a"
-    ]
+    ],  
+
+async getServers(epUrl) {
     async getServers(epUrl) {
       const { data } = await fetchWithRetry(epUrl);
       const $ = cheerio.load(data);
