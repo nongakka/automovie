@@ -1,172 +1,32 @@
 [
-  {
-    "name": "ซีรี่ย์ออนไลน์",
-    "slug": "%e0%b8%94%e0%b8%b9-%e0%b8%8b%e0%b8%b5%e0%b8%a3%e0%b8%b5%e0%b9%88%e0%b8%a2%e0%b9%8c%e0%b8%ad%e0%b8%ad%e0%b8%99%e0%b9%84%e0%b8%a5%e0%b8%99%e0%b9%8c",
-    "url": "https://goseries4k.com/category/%e0%b8%94%e0%b8%b9-%e0%b8%8b%e0%b8%b5%e0%b8%a3%e0%b8%b5%e0%b9%88%e0%b8%a2%e0%b9%8c%e0%b8%ad%e0%b8%ad%e0%b8%99%e0%b9%84%e0%b8%a5%e0%b8%99%e0%b9%8c/"
-  },
-  {
-    "name": "ซีรี่ย์จีน",
-    "slug": "%e0%b8%94%e0%b8%b9-%e0%b8%8b%e0%b8%b5%e0%b8%a3%e0%b8%b5%e0%b9%88%e0%b8%a2%e0%b9%8c%e0%b8%88%e0%b8%b5%e0%b8%99-%e0%b8%ad%e0%b8%ad%e0%b8%99%e0%b9%84%e0%b8%a5%e0%b8%99%e0%b9%8c",
-    "url": "https://goseries4k.com/category/%e0%b8%94%e0%b8%b9-%e0%b8%8b%e0%b8%b5%e0%b8%a3%e0%b8%b5%e0%b9%88%e0%b8%a2%e0%b9%8c%e0%b8%88%e0%b8%b5%e0%b8%99-%e0%b8%ad%e0%b8%ad%e0%b8%99%e0%b9%84%e0%b8%a5%e0%b8%99%e0%b9%8c/"
-  },
-  {
-    "name": "ซีรี่ย์เกาหลี",
-    "slug": "%e0%b8%94%e0%b8%b9%e0%b8%8b%e0%b8%b5%e0%b8%a3%e0%b8%b5%e0%b9%88%e0%b8%a2%e0%b9%8c%e0%b9%80%e0%b8%81%e0%b8%b2%e0%b8%ab%e0%b8%a5%e0%b8%b5-%e0%b8%ad%e0%b8%ad%e0%b8%99%e0%b9%84%e0%b8%a5%e0%b8%99%e0%b9%8c",
-    "url": "https://goseries4k.com/category/%e0%b8%94%e0%b8%b9%e0%b8%8b%e0%b8%b5%e0%b8%a3%e0%b8%b5%e0%b9%88%e0%b8%a2%e0%b9%8c%e0%b9%80%e0%b8%81%e0%b8%b2%e0%b8%ab%e0%b8%a5%e0%b8%b5-%e0%b8%ad%e0%b8%ad%e0%b8%99%e0%b9%84%e0%b8%a5%e0%b8%99%e0%b9%8c/"
-  },
-  {
-    "name": "ซีรี่ย์ออนไลน์",
-    "slug": "%e0%b8%94%e0%b8%b9-%e0%b8%8b%e0%b8%b5%e0%b8%a3%e0%b8%b5%e0%b9%88%e0%b8%a2%e0%b9%8c%e0%b8%ad%e0%b8%ad%e0%b8%99%e0%b9%84%e0%b8%a5%e0%b8%99%e0%b9%8c",
-    "url": "https://goseries4k.com/category/%e0%b8%94%e0%b8%b9-%e0%b8%8b%e0%b8%b5%e0%b8%a3%e0%b8%b5%e0%b9%88%e0%b8%a2%e0%b9%8c%e0%b8%ad%e0%b8%ad%e0%b8%99%e0%b9%84%e0%b8%a5%e0%b8%99%e0%b9%8c/"
-  },
-  {
-    "name": "ซีรี่ย์จีน",
-    "slug": "%e0%b8%94%e0%b8%b9-%e0%b8%8b%e0%b8%b5%e0%b8%a3%e0%b8%b5%e0%b9%88%e0%b8%a2%e0%b9%8c%e0%b8%88%e0%b8%b5%e0%b8%99-%e0%b8%ad%e0%b8%ad%e0%b8%99%e0%b9%84%e0%b8%a5%e0%b8%99%e0%b9%8c",
-    "url": "https://goseries4k.com/category/%e0%b8%94%e0%b8%b9-%e0%b8%8b%e0%b8%b5%e0%b8%a3%e0%b8%b5%e0%b9%88%e0%b8%a2%e0%b9%8c%e0%b8%88%e0%b8%b5%e0%b8%99-%e0%b8%ad%e0%b8%ad%e0%b8%99%e0%b9%84%e0%b8%a5%e0%b8%99%e0%b9%8c/"
-  },
-  {
-    "name": "ซีรี่ย์เกาหลี",
-    "slug": "%e0%b8%94%e0%b8%b9%e0%b8%8b%e0%b8%b5%e0%b8%a3%e0%b8%b5%e0%b9%88%e0%b8%a2%e0%b9%8c%e0%b9%80%e0%b8%81%e0%b8%b2%e0%b8%ab%e0%b8%a5%e0%b8%b5-%e0%b8%ad%e0%b8%ad%e0%b8%99%e0%b9%84%e0%b8%a5%e0%b8%99%e0%b9%8c",
-    "url": "https://goseries4k.com/category/%e0%b8%94%e0%b8%b9%e0%b8%8b%e0%b8%b5%e0%b8%a3%e0%b8%b5%e0%b9%88%e0%b8%a2%e0%b9%8c%e0%b9%80%e0%b8%81%e0%b8%b2%e0%b8%ab%e0%b8%a5%e0%b8%b5-%e0%b8%ad%e0%b8%ad%e0%b8%99%e0%b9%84%e0%b8%a5%e0%b8%99%e0%b9%8c/"
-  },
-  {
-    "name": "ซีรี่ย์อัพเดทใหม่ [ดูทั้งหมด]",
-    "slug": "ดู-ซีรี่ย์ออนไลน์",
-    "url": "https://goseries4k.com/category/ดู-ซีรี่ย์ออนไลน์/"
-  },
-  {
-    "name": "ซีรี่ย์จีน [ดูทั้งหมด]",
-    "slug": "ดู-ซีรี่ย์จีน-ออนไลน์",
-    "url": "https://goseries4k.com/category/ดู-ซีรี่ย์จีน-ออนไลน์/"
-  },
-  {
-    "name": "ซีรี่ย์เกาหลี [ดูทั้งหมด]",
-    "slug": "ดูซีรี่ย์เกาหลี-ออนไลน์",
-    "url": "https://goseries4k.com/category/ดูซีรี่ย์เกาหลี-ออนไลน์/"
-  },
-  {
-    "name": "ซีรี่ย์จีน",
-    "slug": "%e0%b8%94%e0%b8%b9-%e0%b8%8b%e0%b8%b5%e0%b8%a3%e0%b8%b5%e0%b9%88%e0%b8%a2%e0%b9%8c%e0%b8%88%e0%b8%b5%e0%b8%99-%e0%b8%ad%e0%b8%ad%e0%b8%99%e0%b9%84%e0%b8%a5%e0%b8%99%e0%b9%8c",
-    "url": "https://goseries4k.com/category/%e0%b8%94%e0%b8%b9-%e0%b8%8b%e0%b8%b5%e0%b8%a3%e0%b8%b5%e0%b9%88%e0%b8%a2%e0%b9%8c%e0%b8%88%e0%b8%b5%e0%b8%99-%e0%b8%ad%e0%b8%ad%e0%b8%99%e0%b9%84%e0%b8%a5%e0%b8%99%e0%b9%8c/"
-  },
-  {
-    "name": "ซีรี่ย์จีน 2024",
-    "slug": "%e0%b8%8b%e0%b8%b5%e0%b8%a3%e0%b8%b5%e0%b9%88%e0%b8%a2%e0%b9%8c%e0%b8%88%e0%b8%b5%e0%b8%99-2024",
-    "url": "https://goseries4k.com/category/%e0%b8%8b%e0%b8%b5%e0%b8%a3%e0%b8%b5%e0%b9%88%e0%b8%a2%e0%b9%8c%e0%b8%88%e0%b8%b5%e0%b8%99-2024/"
-  },
-  {
-    "name": "ซีรี่ย์ญี่ปุ่น",
-    "slug": "%e0%b8%8b%e0%b8%b5%e0%b8%a3%e0%b8%b5%e0%b9%88%e0%b8%a2%e0%b9%8c%e0%b8%8d%e0%b8%b5%e0%b9%88%e0%b8%9b%e0%b8%b8%e0%b9%88%e0%b8%99",
-    "url": "https://goseries4k.com/category/%e0%b8%8b%e0%b8%b5%e0%b8%a3%e0%b8%b5%e0%b9%88%e0%b8%a2%e0%b9%8c%e0%b8%8d%e0%b8%b5%e0%b9%88%e0%b8%9b%e0%b8%b8%e0%b9%88%e0%b8%99/"
-  },
-  {
-    "name": "ซีรี่ย์ฝรั่ง",
-    "slug": "%e0%b8%8b%e0%b8%b5%e0%b8%a3%e0%b8%b5%e0%b9%88%e0%b8%a2%e0%b9%8c%e0%b8%9d%e0%b8%a3%e0%b8%b1%e0%b9%88%e0%b8%87",
-    "url": "https://goseries4k.com/category/%e0%b8%8b%e0%b8%b5%e0%b8%a3%e0%b8%b5%e0%b9%88%e0%b8%a2%e0%b9%8c%e0%b8%9d%e0%b8%a3%e0%b8%b1%e0%b9%88%e0%b8%87/"
-  },
-  {
-    "name": "ซีรี่ย์วาย",
-    "slug": "%e0%b8%8b%e0%b8%b5%e0%b8%a3%e0%b8%b5%e0%b9%88%e0%b8%a2%e0%b9%8c%e0%b8%a7%e0%b8%b2%e0%b8%a2",
-    "url": "https://goseries4k.com/category/%e0%b8%8b%e0%b8%b5%e0%b8%a3%e0%b8%b5%e0%b9%88%e0%b8%a2%e0%b9%8c%e0%b8%a7%e0%b8%b2%e0%b8%a2/"
-  },
-  {
-    "name": "ซีรี่ย์ออนไลน์",
-    "slug": "%e0%b8%94%e0%b8%b9-%e0%b8%8b%e0%b8%b5%e0%b8%a3%e0%b8%b5%e0%b9%88%e0%b8%a2%e0%b9%8c%e0%b8%ad%e0%b8%ad%e0%b8%99%e0%b9%84%e0%b8%a5%e0%b8%99%e0%b9%8c",
-    "url": "https://goseries4k.com/category/%e0%b8%94%e0%b8%b9-%e0%b8%8b%e0%b8%b5%e0%b8%a3%e0%b8%b5%e0%b9%88%e0%b8%a2%e0%b9%8c%e0%b8%ad%e0%b8%ad%e0%b8%99%e0%b9%84%e0%b8%a5%e0%b8%99%e0%b9%8c/"
-  },
-  {
-    "name": "ซีรี่ย์อังกฤษ",
-    "slug": "%e0%b8%8b%e0%b8%b5%e0%b8%a3%e0%b8%b5%e0%b9%88%e0%b8%a2%e0%b9%8c%e0%b8%ad%e0%b8%b1%e0%b8%87%e0%b8%81%e0%b8%a4%e0%b8%a9",
-    "url": "https://goseries4k.com/category/%e0%b8%8b%e0%b8%b5%e0%b8%a3%e0%b8%b5%e0%b9%88%e0%b8%a2%e0%b9%8c%e0%b8%ad%e0%b8%b1%e0%b8%87%e0%b8%81%e0%b8%a4%e0%b8%a9/"
-  },
-  {
-    "name": "ซีรี่ย์เกาหลี",
-    "slug": "%e0%b8%94%e0%b8%b9%e0%b8%8b%e0%b8%b5%e0%b8%a3%e0%b8%b5%e0%b9%88%e0%b8%a2%e0%b9%8c%e0%b9%80%e0%b8%81%e0%b8%b2%e0%b8%ab%e0%b8%a5%e0%b8%b5-%e0%b8%ad%e0%b8%ad%e0%b8%99%e0%b9%84%e0%b8%a5%e0%b8%99%e0%b9%8c",
-    "url": "https://goseries4k.com/category/%e0%b8%94%e0%b8%b9%e0%b8%8b%e0%b8%b5%e0%b8%a3%e0%b8%b5%e0%b9%88%e0%b8%a2%e0%b9%8c%e0%b9%80%e0%b8%81%e0%b8%b2%e0%b8%ab%e0%b8%a5%e0%b8%b5-%e0%b8%ad%e0%b8%ad%e0%b8%99%e0%b9%84%e0%b8%a5%e0%b8%99%e0%b9%8c/"
-  },
-  {
-    "name": "ซีรี่ย์ใหม่",
-    "slug": "%e0%b8%8b%e0%b8%b5%e0%b8%a3%e0%b8%b5%e0%b9%88%e0%b8%a2%e0%b9%8c%e0%b9%83%e0%b8%ab%e0%b8%a1%e0%b9%88",
-    "url": "https://goseries4k.com/category/%e0%b8%8b%e0%b8%b5%e0%b8%a3%e0%b8%b5%e0%b9%88%e0%b8%a2%e0%b9%8c%e0%b9%83%e0%b8%ab%e0%b8%a1%e0%b9%88/"
-  },
-  {
-    "name": "ซีรี่ย์ใหม่ 2020",
-    "slug": "%e0%b8%8b%e0%b8%b5%e0%b8%a3%e0%b8%b5%e0%b9%88%e0%b8%a2%e0%b9%8c%e0%b9%83%e0%b8%ab%e0%b8%a1%e0%b9%88-2020",
-    "url": "https://goseries4k.com/category/%e0%b8%8b%e0%b8%b5%e0%b8%a3%e0%b8%b5%e0%b9%88%e0%b8%a2%e0%b9%8c%e0%b9%83%e0%b8%ab%e0%b8%a1%e0%b9%88-2020/"
-  },
-  {
-    "name": "ดูซีรี่ย์ (2026)",
-    "slug": "%e0%b8%94%e0%b8%b9%e0%b8%8b%e0%b8%b5%e0%b8%a3%e0%b8%b5%e0%b9%88%e0%b8%a2%e0%b9%8c-2026",
-    "url": "https://goseries4k.com/category/%e0%b8%94%e0%b8%b9%e0%b8%8b%e0%b8%b5%e0%b8%a3%e0%b8%b5%e0%b9%88%e0%b8%a2%e0%b9%8c-2026/"
-  },
-  {
-    "name": "ดูซีรี่ย์ 2025",
-    "slug": "%e0%b8%94%e0%b8%b9%e0%b8%8b%e0%b8%b5%e0%b8%a3%e0%b8%b5%e0%b9%88%e0%b8%a2%e0%b9%8c-2025",
-    "url": "https://goseries4k.com/category/%e0%b8%94%e0%b8%b9%e0%b8%8b%e0%b8%b5%e0%b8%a3%e0%b8%b5%e0%b9%88%e0%b8%a2%e0%b9%8c-2025/"
-  },
-  {
-    "name": "ดูซีรี่ย์ออนไลน์",
-    "slug": "%e0%b8%94%e0%b8%b9%e0%b8%8b%e0%b8%b5%e0%b8%a3%e0%b8%b5%e0%b9%88%e0%b8%a2%e0%b9%8c%e0%b8%ad%e0%b8%ad%e0%b8%99%e0%b9%84%e0%b8%a5%e0%b8%99%e0%b9%8c",
-    "url": "https://goseries4k.com/category/%e0%b8%94%e0%b8%b9%e0%b8%8b%e0%b8%b5%e0%b8%a3%e0%b8%b5%e0%b9%88%e0%b8%a2%e0%b9%8c%e0%b8%ad%e0%b8%ad%e0%b8%99%e0%b9%84%e0%b8%a5%e0%b8%99%e0%b9%8c/"
-  },
-  {
-    "name": "ดูอนิเมะ",
-    "slug": "%e0%b8%94%e0%b8%b9%e0%b8%ad%e0%b8%99%e0%b8%b4%e0%b9%80%e0%b8%a1%e0%b8%b0",
-    "url": "https://goseries4k.com/category/%e0%b8%94%e0%b8%b9%e0%b8%ad%e0%b8%99%e0%b8%b4%e0%b9%80%e0%b8%a1%e0%b8%b0/"
-  },
-  {
-    "name": "ดูอนิเมะ 2025",
-    "slug": "%e0%b8%94%e0%b8%b9%e0%b8%ad%e0%b8%99%e0%b8%b4%e0%b9%80%e0%b8%a1%e0%b8%b0-2025",
-    "url": "https://goseries4k.com/category/%e0%b8%94%e0%b8%b9%e0%b8%ad%e0%b8%99%e0%b8%b4%e0%b9%80%e0%b8%a1%e0%b8%b0-2025/"
-  },
-  {
-    "name": "มินิซีรี่ย์",
-    "slug": "%e0%b8%a1%e0%b8%b4%e0%b8%99%e0%b8%b4%e0%b8%8b%e0%b8%b5%e0%b8%a3%e0%b8%b5%e0%b9%88%e0%b8%a2%e0%b9%8c",
-    "url": "https://goseries4k.com/category/%e0%b8%a1%e0%b8%b4%e0%b8%99%e0%b8%b4%e0%b8%8b%e0%b8%b5%e0%b8%a3%e0%b8%b5%e0%b9%88%e0%b8%a2%e0%b9%8c/"
-  },
-  {
-    "name": "อนิเมะ 2020",
-    "slug": "%e0%b8%ad%e0%b8%99%e0%b8%b4%e0%b9%80%e0%b8%a1%e0%b8%b0-2020",
-    "url": "https://goseries4k.com/category/%e0%b8%ad%e0%b8%99%e0%b8%b4%e0%b9%80%e0%b8%a1%e0%b8%b0-2020/"
-  },
-  {
-    "name": "อนิเมะ 2023",
-    "slug": "%e0%b8%ad%e0%b8%99%e0%b8%b4%e0%b9%80%e0%b8%a1%e0%b8%b0-2023",
-    "url": "https://goseries4k.com/category/%e0%b8%ad%e0%b8%99%e0%b8%b4%e0%b9%80%e0%b8%a1%e0%b8%b0-2023/"
-  },
-  {
-    "name": "อนิเมะ2018",
-    "slug": "%e0%b8%ad%e0%b8%99%e0%b8%b4%e0%b9%80%e0%b8%a1%e0%b8%b02018",
-    "url": "https://goseries4k.com/category/%e0%b8%ad%e0%b8%99%e0%b8%b4%e0%b9%80%e0%b8%a1%e0%b8%b02018/"
-  },
-  {
-    "name": "อนิเมะ2019",
-    "slug": "%e0%b8%ad%e0%b8%99%e0%b8%b4%e0%b9%80%e0%b8%a1%e0%b8%b02019",
-    "url": "https://goseries4k.com/category/%e0%b8%ad%e0%b8%99%e0%b8%b4%e0%b9%80%e0%b8%a1%e0%b8%b02019/"
-  },
-  {
-    "name": "อนิเมะ2021",
-    "slug": "%e0%b8%ad%e0%b8%99%e0%b8%b4%e0%b9%80%e0%b8%a1%e0%b8%b02021",
-    "url": "https://goseries4k.com/category/%e0%b8%ad%e0%b8%99%e0%b8%b4%e0%b9%80%e0%b8%a1%e0%b8%b02021/"
-  },
-  {
-    "name": "อนิเมะ2024",
-    "slug": "%e0%b8%ad%e0%b8%99%e0%b8%b4%e0%b9%80%e0%b8%a1%e0%b8%b02024",
-    "url": "https://goseries4k.com/category/%e0%b8%ad%e0%b8%99%e0%b8%b4%e0%b9%80%e0%b8%a1%e0%b8%b02024/"
-  },
-  {
-    "name": "อนิเมะจีน",
-    "slug": "%e0%b8%ad%e0%b8%99%e0%b8%b4%e0%b9%80%e0%b8%a1%e0%b8%b0%e0%b8%88%e0%b8%b5%e0%b8%99",
-    "url": "https://goseries4k.com/category/%e0%b8%ad%e0%b8%99%e0%b8%b4%e0%b9%80%e0%b8%a1%e0%b8%b0%e0%b8%88%e0%b8%b5%e0%b8%99/"
-  },
-  {
-    "name": "อนิเมะญี่ปุ่น",
-    "slug": "%e0%b8%ad%e0%b8%99%e0%b8%b4%e0%b9%80%e0%b8%a1%e0%b8%b0%e0%b8%8d%e0%b8%b5%e0%b9%88%e0%b8%9b%e0%b8%b8%e0%b9%88%e0%b8%99",
-    "url": "https://goseries4k.com/category/%e0%b8%ad%e0%b8%99%e0%b8%b4%e0%b9%80%e0%b8%a1%e0%b8%b0%e0%b8%8d%e0%b8%b5%e0%b9%88%e0%b8%9b%e0%b8%b8%e0%b9%88%e0%b8%99/"
-  },
-  {
-    "name": "เรียลลิตี้",
-    "slug": "%e0%b9%80%e0%b8%a3%e0%b8%b5%e0%b8%a2%e0%b8%a5%e0%b8%a5%e0%b8%b4%e0%b8%95%e0%b8%b5%e0%b9%89",
-    "url": "https://goseries4k.com/category/%e0%b9%80%e0%b8%a3%e0%b8%b5%e0%b8%a2%e0%b8%a5%e0%b8%a5%e0%b8%b4%e0%b8%95%e0%b8%b5%e0%b9%89/"
-  }
+{
+"name":"ซีรี่ย์ออนไลน์",
+"slug":"ดู-ซีรี่ย์ออนไลน์",
+"url":"https://goseries4k.com/category/ดู-ซีรี่ย์ออนไลน์/"
+},
+{
+"name":"ซีรี่ย์จีน",
+"slug":"ดู-ซีรี่ย์จีน-ออนไลน์",
+"url":"https://goseries4k.com/category/ดู-ซีรี่ย์จีน-ออนไลน์/"
+},
+{
+"name":"ซีรี่ย์เกาหลี",
+"slug":"ดูซีรี่ย์เกาหลี-ออนไลน์",
+"url":"https://goseries4k.com/category/ดูซีรี่ย์เกาหลี-ออนไลน์/"
+},
+{
+"name":"ซีรี่ย์ญี่ปุ่น",
+"slug":"ซีรี่ย์ญี่ปุ่น",
+"url":"https://goseries4k.com/category/ซีรี่ย์ญี่ปุ่น/"
+},
+{
+"name":"ซีรี่ย์ฝรั่ง",
+"slug":"ซีรี่ย์ฝรั่ง",
+"url":"https://goseries4k.com/category/ซีรี่ย์ฝรั่ง/"
+},
+{
+"name":"อนิเมะ",
+"slug":"ดูอนิเมะ",
+"url":"https://goseries4k.com/category/ดูอนิเมะ/"
+}
 ]
