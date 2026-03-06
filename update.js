@@ -150,10 +150,7 @@ default: {
 "series-days.com": {
 
   articleSelectors: [
-    ".td_module_wrap",
-    ".td_module_10",
-    ".td_module_1",
-    ".td-module-container"
+    ".grid-movie .box"
   ],
 
   episodeSelectors: [
@@ -237,13 +234,6 @@ function autoDetect($, selectors) {
 
 function extractBasicInfo($, el) {
 
-  const title =
-    $(el)
-      .find(".entry-title,.td-module-title,h2,h3,a")
-      .first()
-      .text()
-      .trim();
-
   const link =
     $(el)
       .find("a")
@@ -257,6 +247,15 @@ function extractBasicInfo($, el) {
     $(el)
       .find("img")
       .attr("src");
+
+  const title =
+    $(el)
+      .find("img")
+      .attr("alt") ||
+    $(el)
+      .find("h3")
+      .text()
+      .trim();
 
   return { title, link, image };
 
