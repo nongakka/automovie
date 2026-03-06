@@ -96,40 +96,81 @@ default: {
     "ul li a"
   ],
     async getServers(epUrl) {
-      const { data } = await fetchWithRetry(epUrl);
-      const $ = cheerio.load(data);
 
-      let servers = [];
+  const { data } = await fetchWithRetry(epUrl);
+  const $ = cheerio.load(data);
 
-  $("iframe").each((i,el)=>{
+  let servers = [];
 
-  let src =
-    $(el).attr("data-src") ||
-    $(el).attr("src");
+  const buttons = $(".halim-btn");
 
-  if(!src) return;
-
-  if(src.startsWith("//")){
-    src="https:"+src;
+  if(buttons.length === 0){
+    console.log("⚠️ ไม่พบ halim server");
+    return servers;
   }
 
-  servers.push({
-    name:`Server ${i+1}`,
-    url:src
-  });
+  const postId = buttons.first().attr("data-post-id");
 
-});
+  for(let i=0;i<buttons.length;i++){
 
-      $(".toolbar-item.mp-s-sl").each((i,el)=>{
-        const name=$(el).find(".item-text").text().trim();
-        const id=$(el).attr("data-id");
-        if (id) servers.push({ name:name||`Player ${i+1}`, url:id });
+    const btn = buttons.eq(i);
+
+    const server = btn.attr("data-server");
+    const episode = btn.attr("data-episode");
+    const name = btn.text().trim();
+
+    if(!server || !episode) continue;
+
+    try{
+
+      const res = await axios.post(
+        "https://www.series-days.com/wp-admin/admin-ajax.php",
+        new URLSearchParams({
+          action:"halim_ajax_player",
+          post_id:postId,
+          server:server,
+          episode:episode
+        }),
+        {
+          headers:{
+            "Content-Type":"application/x-www-form-urlencoded",
+            "X-Requested-With":"XMLHttpRequest",
+            "User-Agent":"Mozilla/5.0"
+          }
+        }
+      );
+
+      const $$ = cheerio.load(res.data);
+
+      $$("iframe").each((j,el)=>{
+
+        let src = $$(el).attr("src");
+
+        if(!src) return;
+
+        if(src.startsWith("//")){
+          src = "https:"+src;
+        }
+
+        servers.push({
+          name: name || `Server ${j+1}`,
+          url: src
+        });
+
       });
 
-      return servers;
-    }
-  },
+    }catch(err){
 
+      console.log("⚠️ ajax error", server);
+
+    }
+
+  }
+
+  return servers;
+
+}
+},
   // ======================
   // 123HDTV
   // ======================
@@ -163,10 +204,8 @@ default: {
   ],
 
   episodeSelectors: [
-  ".entry-content a[href*='episode']",
-  ".entry-content p a",
-  ".entry-content li a"
-],
+    "select[name='Sequel_select'] option"
+  ],
 
   async getServers(epUrl) {
 
@@ -175,51 +214,75 @@ default: {
 
     let servers = [];
 
-    // iframe player
-    $("iframe").each((i,el)=>{
+    const buttons = $(".halim-btn");
 
-      let src =
-        $(el).attr("data-src") ||
-        $(el).attr("src");
+    if(buttons.length === 0){
+    console.log("⚠️ ไม่พบ halim server");
+    return servers;
+    }
 
-      if(!src) return;
+    const postId = buttons.first().attr("data-post-id");
 
-      if(src.startsWith("//")){
-        src = "https:" + src;
-      }
+    for(let i=0;i<buttons.length;i++){
 
-      if(src.startsWith("/")){
-        src = new URL(src, epUrl).href;
-      }
+    const btn = buttons.eq(i);
 
-      servers.push({
-        name:`Server ${i+1}`,
-        url:src
-      });
+    const server = btn.attr("data-server");
+    const episode = btn.attr("data-episode");
+    const name = btn.text().trim();
 
-    });
+    if(!server || !episode) continue;
 
-    // video tag
-    $("video source").each((i,el)=>{
+    try{
 
-      const src = $(el).attr("src");
+      const res = await axios.post(
+        "https://www.series-days.com/wp-admin/admin-ajax.php",
+        new URLSearchParams({
+          action:"halim_ajax_player",
+          post_id:postId,
+          server:server,
+          episode:episode
+        }),
+        {
+          headers:{
+            "Content-Type":"application/x-www-form-urlencoded",
+            "X-Requested-With":"XMLHttpRequest",
+            "User-Agent":"Mozilla/5.0"
+          }
+        }
+      );
 
-      if(src){
+      const $$ = cheerio.load(res.data);
+
+      $$("iframe").each((j,el)=>{
+
+        let src = $$(el).attr("src");
+
+        if(!src) return;
+
+        if(src.startsWith("//")){
+          src = "https:"+src;
+        }
 
         servers.push({
-          name:`Video ${i+1}`,
-          url:src
+          name: name || `Server ${j+1}`,
+          url: src
         });
 
-      }
+      });
 
-    });
-
-    return servers;
-
+    }catch(err){
+      console.log("⚠️ ajax error", server);
     }
+
   }
+
+  return servers;
+}
+}
+
 };
+
 // ==========================
 // SELECT HANDLER
 // ==========================
@@ -525,7 +588,7 @@ for (let page = startPage; page <= 999; page++) {
 
         const $a = $detail(el2);
 
-        let epLink = normalizeUrl($a.attr("href"));
+        let epLink = normalizeUrl($a.attr("value") || $a.attr("href"));
         if (!epLink) continue;
 
         if (epLink.startsWith("/")) {
