@@ -613,15 +613,19 @@ for (let page = startPage; page <= 999; page++) {
 
         console.log("↳ ดึงตอน:", $a.text().trim());
 
-        const siteHandler = getHandler(epLink);
+        const siteHandler = getHandler(link);
 
         let servers = [];
 
         try {
-          servers = await siteHandler.getServers(epLink);
+
+          servers = await siteHandler.getServers(link);
+
         } catch (err) {
-          console.log("⚠️ server error:", epLink);
+
+          console.log("⚠️ server error:", link);
           console.log(err.response?.status || err.message);
+
         }
 
         if (!movie.episodes.find(e => e.link === epLink)) {
