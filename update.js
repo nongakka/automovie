@@ -123,22 +123,24 @@ default: {
 
     try{
 
-      const res = await axios.post(
-        "https://www.series-days.com/wp-admin/admin-ajax.php",
-        new URLSearchParams({
-          action:"halim_ajax_player",
-          post_id:postId,
-          server:server,
-          episode:episode
-        }),
-        {
-          headers:{
-            "Content-Type":"application/x-www-form-urlencoded",
-            "X-Requested-With":"XMLHttpRequest",
-            "User-Agent":"Mozilla/5.0"
-          }
-        }
-      );
+const res = await client.post(
+  "https://www.series-days.com/wp-admin/admin-ajax.php",
+  new URLSearchParams({
+    action: "halim_ajax_player",
+    post_id: postId,
+    server: server,
+    episode: episode
+  }),
+  {
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      "X-Requested-With": "XMLHttpRequest",
+      "User-Agent": "Mozilla/5.0",
+      "Referer": epUrl,
+      "Origin": "https://www.series-days.com"
+    }
+  }
+);
 
       const $$ = cheerio.load(res.data);
 
@@ -235,7 +237,7 @@ default: {
 
       try {
 
-        const res = await axios.post(
+        const res = await client.post(
           "https://www.series-days.com/wp-admin/admin-ajax.php",
           new URLSearchParams({
             action: "halim_ajax_player",
@@ -603,7 +605,7 @@ for (let page = startPage; page <= 999; page++) {
         epLink = new URL(epLink, cat.url).href;
         }
 
-        const domain = getDomain(cat.url);
+        const domain = getDomain(epLink);
 
         if (!epLink.includes(domain)) continue;
 
