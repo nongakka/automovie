@@ -125,7 +125,7 @@ async function scrape() {
 
     const $ = cheerio.load(html);
 
-    const movies = $("article");
+    const movies = $(".grid-item, .item-movie, .movie, article");
 
     console.log("พบโพสต์:", movies.length);
 
