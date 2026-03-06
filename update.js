@@ -77,23 +77,38 @@ const SiteHandlers = {
   // DEFAULT HANDLER
   // ======================
   default: {
-    articleSelectors: [
-      "article",".movie-item",".post",".item",".anime-item",".-movie"
-    ],
-    episodeSelectors: [
-      "ul#MVP li a",".episode-list a",".ep a",".episodes a",".mp-ep-btn"
-    ],
+  articleSelectors: [
+    "article",
+    ".post",
+    ".post-item",
+    ".grid-item",
+    ".item",
+    ".movie-item"
+  ],
+  
+  episodeSelectors: [
+    ".entry-content p a",
+    ".entry-content a",
+    ".entry-content li a",
+    ".episode a",
+    ".ep a",
+    "ul li a"
+  ],
     async getServers(epUrl) {
       const { data } = await fetchWithRetry(epUrl);
       const $ = cheerio.load(data);
 
       let servers = [];
 
-      const main =
-        $("div.mpIframe iframe").attr("data-src") ||
-        $("div.mpIframe iframe").attr("src");
-
-      if (main) servers.push({ name:"Main", url:main });
+  $("iframe").each((i,el)=>{
+    const src=$(el).attr("data-src")||$(el).attr("src");
+    if(src){
+      servers.push({
+        name:`Server ${i+1}`,
+        url:src
+        });
+    }
+  });
 
       $(".toolbar-item.mp-s-sl").each((i,el)=>{
         const name=$(el).find(".item-text").text().trim();
@@ -335,8 +350,11 @@ for (let page = startPage; page <= 999; page++) {
 
   try {
 
-    const { data: catHtml } =
-      await fetchWithRetry(`${cat.url}/page/${page}`);
+  const pageUrl =
+    page === 1 ? cat.url : `${cat.url}/page/${page}`;
+
+  const { data: catHtml } =
+    await fetchWithRetry(pageUrl);
 
     const $cat = cheerio.load(catHtml);
 
@@ -405,7 +423,7 @@ for (let page = startPage; page <= 999; page++) {
         const $a = $detail(el2);
 
         let epLink = normalizeUrl($a.attr("href"));
-        if (!epLink) continue;
+        if (!epLink || !epLink.includes("series-days.com")) continue;
 
         if (movie.episodes.find(x => x.link === epLink)) {
           console.log("⛔ ตอนซ้ำ หยุดเรื่อง");
