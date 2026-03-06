@@ -78,12 +78,19 @@ const SiteHandlers = {
   // ======================
   default: {
   articleSelectors: [
-    "article",
-    ".post",
-    ".post-item",
-    ".grid-item",
-    ".item",
-    ".movie-item"
+  "article",
+  ".post",
+  ".post-item",
+  ".grid-item",
+  ".item",
+  ".movie-item",
+
+  ".post-listing article",
+  ".td-module-container",
+  ".td_module_wrap",
+  ".td_module_10",
+  ".td_module_1"
+],
   ],
   
   episodeSelectors: [
@@ -153,7 +160,10 @@ function getHandler(url) {
   const domain = getDomain(url);
   return SiteHandlers[domain] || SiteHandlers.default;
 }
-
+console.log("HTML length:", catHtml.length);
+for (const sel of handler.articleSelectors) {
+  console.log("ลอง selector:", sel, "=>", $cat(sel).length);
+}
 // ==========================
 // AUTO DETECT HELPERS
 // ==========================
@@ -356,10 +366,10 @@ for (let page = startPage; page <= 999; page++) {
  
 
   if (page === 1) {
-    pageUrl = new URL(cat.url).href;
-  } else {
-    pageUrl = new URL(`page/${page}/`, cat.url).href;
-  }
+  pageUrl = cat.url;
+} else {
+  pageUrl = `${cat.url}page/${page}/`;
+}
       console.log("🌐 URL:", pageUrl);
   const { data: catHtml } =
     await fetchWithRetry(pageUrl);
