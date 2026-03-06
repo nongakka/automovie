@@ -213,8 +213,11 @@ const res = await client.post(
 
     const servers = [];
 
-    const { data } = await fetchWithRetry(epUrl);
-    const $ = cheerio.load(data);
+    const resPage = await client.get(epUrl);
+    const $ = cheerio.load(resPage.data);
+
+    // ⭐ ดึง cookie
+    const cookie = resPage.headers["set-cookie"]?.join("; ") || "";
 
     const buttons = $(".halim-btn");
 
@@ -251,7 +254,8 @@ for(let i=0;i<buttons.length;i++){
           "X-Requested-With":"XMLHttpRequest",
           "User-Agent":"Mozilla/5.0",
           "Referer": epUrl,
-          "Origin":"https://www.series-days.com"
+          "Origin":"https://www.series-days.com",
+          "Cookie": cookie
         }
       }
     );
