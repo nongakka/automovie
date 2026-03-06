@@ -15,10 +15,6 @@ concurrency:
 
 jobs:
 
-# --------------------------------
-# STEP 1
-# อ่าน categories.json
-# --------------------------------
   prepare:
     runs-on: ubuntu-latest
 
@@ -43,10 +39,6 @@ jobs:
           echo "matrix=$MATRIX" >> $GITHUB_OUTPUT
 
 
-# --------------------------------
-# STEP 2
-# scraper
-# --------------------------------
   update:
 
     needs: prepare
@@ -75,9 +67,7 @@ jobs:
       - name: Update Categories
         run: node update-categories.js
 
-# -------------------------------
-# RUN SCRAPER
-# -------------------------------
+
       - name: Run Scraper
         id: scraper
         env:
@@ -95,16 +85,13 @@ jobs:
           fi
 
 
-# -------------------------------
-# COMMIT
-# -------------------------------
       - name: Commit Data
         run: |
 
           git config --global user.name "auto-bot"
           git config --global user.email "auto@bot.com"
 
-          git add data/*.json data/categories.json || true
+          git add data/*.json || true
 
           if git diff --staged --quiet; then
             echo "No changes"
@@ -113,21 +100,20 @@ jobs:
 
             for i in {1..5}; do
               git pull --rebase origin main && git push && break
-              echo "Retry push..."
               sleep 5
             done
           fi
 
 
-# -------------------------------
-# TRIGGER NEXT RUN
-# -------------------------------
+      - name: Install GitHub CLI
+        run: |
+          sudo apt update
+          sudo apt install gh -y
+
+
       - name: Trigger Next Run
         if: steps.scraper.outputs.continue == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-
-          echo "Trigger next workflow..."
-
           gh workflow run matrix.yml
