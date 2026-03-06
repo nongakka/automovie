@@ -214,71 +214,33 @@ default: {
 
     let servers = [];
 
-    const buttons = $(".halim-btn");
+$("iframe").each((i,el)=>{
 
-    if(buttons.length === 0){
-    console.log("⚠️ ไม่พบ halim server");
-    return servers;
-    }
+  let src =
+      $(el).attr("data-src") ||
+      $(el).attr("data-lazy-src") ||
+      $(el).attr("src");
 
-    const postId = buttons.first().attr("data-post-id");
+  if(!src) return;
 
-    for(let i=0;i<buttons.length;i++){
-
-    const btn = buttons.eq(i);
-
-    const server = btn.attr("data-server");
-    const episode = btn.attr("data-episode");
-    const name = btn.text().trim();
-
-    if(!server || !episode) continue;
-
-    try{
-
-      const res = await axios.post(
-        "https://www.series-days.com/wp-admin/admin-ajax.php",
-        new URLSearchParams({
-          action:"halim_ajax_player",
-          post_id:postId,
-          server:server,
-          episode:episode
-        }),
-        {
-          headers:{
-            "Content-Type":"application/x-www-form-urlencoded",
-            "X-Requested-With":"XMLHttpRequest",
-            "User-Agent":"Mozilla/5.0"
-          }
-        }
-      );
-
-      const $$ = cheerio.load(res.data);
-
-      $$("iframe").each((j,el)=>{
-
-        let src = $$(el).attr("src");
-
-        if(!src) return;
-
-        if(src.startsWith("//")){
-          src = "https:"+src;
-        }
-
-        servers.push({
-          name: name || `Server ${j+1}`,
-          url: src
-        });
-
-      });
-
-    }catch(err){
-      console.log("⚠️ ajax error", server);
-    }
-
+  if(src.startsWith("//")){
+    src = "https:" + src;
   }
 
-  return servers;
-}
+  servers.push({
+    name:`Server ${i+1}`,
+    url:src
+  });
+
+});
+
+    if(servers.length === 0){
+      console.log("⚠️ ไม่พบ iframe");
+    }
+
+    return servers;
+
+  }
 }
 
 };
@@ -586,13 +548,17 @@ for (let page = startPage; page <= 999; page++) {
 
       for (const el2 of epElements) {
 
-        const $a = $detail(el2);
+      const $a = $detail(el2);
 
-        let epLink = normalizeUrl($a.attr("value") || $a.attr("href"));
-        if (!epLink) continue;
+      if($a.text().includes("เลือก")) continue;
+
+        let epLink = $a.attr("value") || $a.attr("href");
+        if(!epLink) continue;
+
+        epLink = normalizeUrl(epLink);
 
         if (epLink.startsWith("/")) {
-            epLink = new URL(epLink, cat.url).href;
+        epLink = new URL(epLink, cat.url).href;
         }
 
         const domain = getDomain(cat.url);
