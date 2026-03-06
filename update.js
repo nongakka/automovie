@@ -214,28 +214,54 @@ default: {
 
     let servers = [];
 
-$("iframe").each((i,el)=>{
+    let iframe =
+      $("iframe").attr("data-src") ||
+      $("iframe").attr("data-lazy-src") ||
+      $("iframe").attr("src");
 
-  let src =
-      $(el).attr("data-src") ||
-      $(el).attr("data-lazy-src") ||
-      $(el).attr("src");
-
-  if(!src) return;
-
-  if(src.startsWith("//")){
-    src = "https:" + src;
-  }
-
-  servers.push({
-    name:`Server ${i+1}`,
-    url:src
-  });
-
-});
-
-    if(servers.length === 0){
+    if (!iframe) {
       console.log("⚠️ ไม่พบ iframe");
+      return servers;
+    }
+
+    if (iframe.startsWith("//")) {
+      iframe = "https:" + iframe;
+    }
+
+    console.log("🎥 iframe:", iframe);
+
+    try {
+
+      const { data: playerHtml } =
+        await fetchWithRetry(iframe);
+
+      const $$ = cheerio.load(playerHtml);
+
+      $$("script").each((i, el) => {
+
+        const txt = $$(el).html() || "";
+
+        const match = txt.match(/https?:\/\/[^"]+\.m3u8/g);
+
+        if (match) {
+
+          match.forEach(m3u8 => {
+
+            servers.push({
+              name: "M3U8",
+              url: m3u8
+            });
+
+          });
+
+        }
+
+      });
+
+    } catch (err) {
+
+      console.log("⚠️ player error");
+
     }
 
     return servers;
