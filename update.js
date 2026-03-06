@@ -352,9 +352,9 @@ for (let page = startPage; page <= 999; page++) {
 
   const pageUrl =
     page === 1 ? cat.url : `${cat.url}/page/${page}`;
-
+  console.log("🌐 URL:", pageUrl);
   const { data: catHtml } =
-    await fetchWithRetry(pageUrl);
+    await fetchWithRetry(encodeURI(pageUrl));
 
     const $cat = cheerio.load(catHtml);
 
@@ -438,8 +438,9 @@ for (let page = startPage; page <= 999; page++) {
 
         try {
           servers = await siteHandler.getServers(epLink);
-        } catch (err) {
-          console.log("⚠️ server error:", epLink);
+        catch (err) {
+          console.log("⚠️ ข้ามหน้า", page);
+          console.log(err.response?.status || err.message);
         }
 
         movie.episodes.push({
