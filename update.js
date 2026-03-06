@@ -160,12 +160,14 @@ function getHandler(url) {
 function autoDetect($, selectors) {
   for (const sel of selectors) {
     const found = $(sel);
-    if (found.length>0) {
+    if (found.length > 0) {
       console.log("🔍 ใช้ selector:", sel);
       return found;
     }
   }
-  return [];
+
+  // สำคัญมาก: ต้อง return cheerio object
+  return $([]);
 }
 
 function extractBasicInfo($, el) {
@@ -364,8 +366,11 @@ for (let page = startPage; page <= 999; page++) {
 
     const $cat = cheerio.load(catHtml);
 
-    const articles =
-      autoDetect($cat, handler.articleSelectors).toArray();
+    const postList = autoDetect($cat, handler.articleSelectors);
+
+      console.log("พบโพสต์:", postList.length);
+
+    const articles = postList.toArray();
 
     if (articles.length === 0) {
 
