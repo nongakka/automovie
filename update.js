@@ -38,7 +38,7 @@ const client = axios.create({
 
 const delay = ms => new Promise(r => setTimeout(r, ms));
 const randomDelay = (min=700,max=1500) =>
-  delay(Math.floor(Math.random()*(max-min))+min);
+  delay(Math.floor(Math.random()*(max-min+1))+min);
 
 function normalizeUrl(url) {
   if (!url) return null;
@@ -68,30 +68,24 @@ async function fetchWithRetry(url, retries=3) {
   }
 }
 
-// ==========================
-// SITE HANDLERS
-// ==========================
-const SiteHandlers = {
-
   // ======================
   // DEFAULT HANDLER
   // ======================
-  default: {
-  articleSelectors: [
-  "article",
-  ".post",
-  ".post-item",
-  ".grid-item",
-  ".item",
-  ".movie-item",
-
-  ".post-listing article",
-  ".td-module-container",
-  ".td_module_wrap",
-  ".td_module_10",
-  ".td_module_1"
-],
-  ],
+const SiteHandlers = {
+default: {
+    articleSelectors: [
+      "article",
+      ".post",
+      ".post-item",
+      ".grid-item",
+      ".item",
+      ".movie-item",
+      ".post-listing article",
+      ".td-module-container",
+      ".td_module_wrap",
+      ".td_module_10",
+      ".td_module_1"
+    ],
   
   episodeSelectors: [
     ".entry-content p a",
@@ -149,10 +143,74 @@ const SiteHandlers = {
 
       return servers;
     }
+ },
+// ======================
+// SERIES-DAYS
+// ======================
+"series-days.com": {
+
+  articleSelectors: [
+    ".td_module_wrap",
+    ".td_module_10",
+    ".td_module_1",
+    ".td-module-container"
+  ],
+
+  episodeSelectors: [
+  ".entry-content p a",
+  ".entry-content li a",
+  ".entry-content a",
+  ".entry-content strong a",
+  ".entry-content h3 a"
+],
+
+  async getServers(epUrl) {
+
+    const { data } = await fetchWithRetry(epUrl);
+    const $ = cheerio.load(data);
+
+    let servers = [];
+
+    // iframe player
+    $("iframe").each((i,el)=>{
+
+      let src =
+        $(el).attr("data-src") ||
+        $(el).attr("src");
+
+      if(!src) return;
+
+      if(src.startsWith("//"))
+        src = "https:" + src;
+
+      servers.push({
+        name:`Server ${i+1}`,
+        url:src
+      });
+
+    });
+
+    // video tag
+    $("video source").each((i,el)=>{
+
+      const src = $(el).attr("src");
+
+      if(src){
+
+        servers.push({
+          name:`Video ${i+1}`,
+          url:src
+        });
+
+      }
+
+    });
+
+    return servers;
+
+    }
   }
-
 };
-
 // ==========================
 // SELECT HANDLER
 // ==========================
@@ -160,10 +218,7 @@ function getHandler(url) {
   const domain = getDomain(url);
   return SiteHandlers[domain] || SiteHandlers.default;
 }
-console.log("HTML length:", catHtml.length);
-for (const sel of handler.articleSelectors) {
-  console.log("ลอง selector:", sel, "=>", $cat(sel).length);
-}
+
 // ==========================
 // AUTO DETECT HELPERS
 // ==========================
@@ -181,14 +236,30 @@ function autoDetect($, selectors) {
 }
 
 function extractBasicInfo($, el) {
-  const title =
-    $(el).find(".entry-title,.title,h2,h3").first().text().trim();
 
-  const link=$(el).find("a").first().attr("href");
-  const image=$(el).find("img").attr("data-src")||
-               $(el).find("img").attr("src");
+  const title =
+    $(el)
+      .find(".entry-title,.td-module-title,h2,h3,a")
+      .first()
+      .text()
+      .trim();
+
+  const link =
+    $(el)
+      .find("a")
+      .first()
+      .attr("href");
+
+  const image =
+    $(el)
+      .find("img")
+      .attr("data-src") ||
+    $(el)
+      .find("img")
+      .attr("src");
 
   return { title, link, image };
+
 }
 
 // ==========================
@@ -375,7 +446,10 @@ for (let page = startPage; page <= 999; page++) {
     await fetchWithRetry(pageUrl);
 
     const $cat = cheerio.load(catHtml);
-
+    console.log("HTML length:", catHtml.length);
+    for (const sel of handler.articleSelectors) {
+  console.log("ลอง selector:", sel, "=>", $cat(sel).length);
+}
     const postList = autoDetect($cat, handler.articleSelectors);
 
       console.log("พบโพสต์:", postList.length);
