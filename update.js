@@ -104,7 +104,12 @@ const SiteHandlers = {
       $(".toolbar-item.mp-s-sl").each((i,el)=>{
         const name=$(el).find(".item-text").text().trim();
         const id=$(el).attr("data-id");
-        if (id) servers.push({ name:name||`Player ${i+1}`, url:id });
+        if (id) {
+          servers.push({
+            name: name || `Player ${i+1}`,
+            url: `https://goseries4k.com/?server=${id}`
+          });
+        }
       });
 
       return servers;
