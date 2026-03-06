@@ -102,14 +102,23 @@ default: {
       let servers = [];
 
   $("iframe").each((i,el)=>{
-    const src=$(el).attr("data-src")||$(el).attr("src");
-    if(src){
-      servers.push({
-        name:`Server ${i+1}`,
-        url:src
-        });
-    }
+
+  let src =
+    $(el).attr("data-src") ||
+    $(el).attr("src");
+
+  if(!src) return;
+
+  if(src.startsWith("//")){
+    src="https:"+src;
+  }
+
+  servers.push({
+    name:`Server ${i+1}`,
+    url:src
   });
+
+});
 
       $(".toolbar-item.mp-s-sl").each((i,el)=>{
         const name=$(el).find(".item-text").text().trim();
@@ -154,11 +163,9 @@ default: {
   ],
 
   episodeSelectors: [
+  ".entry-content a[href*='episode']",
   ".entry-content p a",
-  ".entry-content li a",
-  ".entry-content a",
-  ".entry-content strong a",
-  ".entry-content h3 a"
+  ".entry-content li a"
 ],
 
   async getServers(epUrl) {
@@ -177,8 +184,13 @@ default: {
 
       if(!src) return;
 
-      if(src.startsWith("//"))
+      if(src.startsWith("//")){
         src = "https:" + src;
+      }
+
+      if(src.startsWith("/")){
+        src = new URL(src, epUrl).href;
+      }
 
       servers.push({
         name:`Server ${i+1}`,
@@ -234,28 +246,25 @@ function autoDetect($, selectors) {
 
 function extractBasicInfo($, el) {
 
-  const link =
-    $(el)
-      .find("a")
-      .first()
-      .attr("href");
+  const $el = $(el);
 
-  const image =
-    $(el)
-      .find("img")
-      .attr("data-src") ||
-    $(el)
-      .find("img")
-      .attr("src");
+  const a = $el.find("a").first();
 
-  const title =
-    $(el)
-      .find("img")
-      .attr("alt") ||
-    $(el)
-      .find("h3")
-      .text()
-      .trim();
+  let link =
+    a.attr("href") ||
+    $el.find("a[href]").attr("href");
+
+  let image =
+    $el.find("img").attr("data-src") ||
+    $el.find("img").attr("data-lazy-src") ||
+    $el.find("img").attr("data-original") ||
+    $el.find("img").attr("src");
+
+  let title =
+    $el.find("img").attr("alt") ||
+    $el.find("a").attr("title") ||
+    $el.find(".title").text().trim() ||
+    $el.find("h3").text().trim();
 
   return { title, link, image };
 
@@ -473,7 +482,7 @@ for (let page = startPage; page <= 999; page++) {
 
       const basic = extractBasicInfo($cat, el);
       if (!basic.title) continue;
-
+        console.log("🎬", basic.title, basic.link);
       const link = normalizeUrl(basic.link);
       if (!link) continue;
 
@@ -523,7 +532,9 @@ for (let page = startPage; page <= 999; page++) {
             epLink = new URL(epLink, cat.url).href;
         }
 
-        if (!epLink.includes(getDomain(cat.url))) continue;
+        const domain = getDomain(cat.url);
+
+        if (!epLink.includes(domain)) continue;
 
         if (movie.episodes.find(x => x.link === epLink)) {
           console.log("⛔ ตอนซ้ำ หยุดเรื่อง");
@@ -543,11 +554,13 @@ for (let page = startPage; page <= 999; page++) {
           console.log(err.response?.status || err.message);
         }
 
-        movie.episodes.push({
-          name: $a.text().trim(),
-          link: epLink,
-          servers
-        });
+        if (!movie.episodes.find(e => e.link === epLink)) {
+          movie.episodes.push({
+            name: $a.text().trim(),
+            link: epLink,
+            servers
+          });
+        }
 
         episodeCounter++;
 
