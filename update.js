@@ -81,13 +81,11 @@ const SiteHandlers = {
       "article",".movie-item",".post",".item",".anime-item",".-movie"
     ],
     episodeSelectors: [
-      "ul#MVP li a",
-      ".episode-list a",
-      ".ep a",
-      ".episodes a",
       ".mp-ep-btn",
-      ".mp-ep-btn a"
-    ],  
+      "ul#MVP li",
+      ".episode-list a",
+      ".episodes a"
+    ]  
 
 async getServers(epUrl) {
 
@@ -440,12 +438,11 @@ for (let page = startPage; page <= 150; page++) {
       if (!link) continue;
 
       // ⭐ เพิ่มตรงนี้
-      if (oldMap.has(link)) {
-        console.log("🌐 ซ้ำข้ามหมวด:", basic.title);
-        continue;
-      }
-
       let movie = oldMap.get(link);
+
+      if (oldMap.has(link)) {
+        movie = oldMap.get(link);
+      }
       
 
       if (movie && movie.episodes && movie.episodes.length > 0) {
@@ -474,13 +471,18 @@ for (let page = startPage; page <= 150; page++) {
       const epElements =
         autoDetect($detail, handler.episodeSelectors).toArray();
 
-      for (const el2 of epElements) {
+  for (const el2 of epElements) {
 
-        const $a = $detail(el2).find("a").first();
+    const $a = $detail(el2).find("a").first();
 
-        let epLink =
-          normalizeUrl($a.attr("href")) ||
-          normalizeUrl($a.attr("data-src"));
+    if (!$a.length) continue;
+
+    let epLink =
+      normalizeUrl($a.attr("href")) ||
+      normalizeUrl($a.attr("data-src"));
+
+    console.log("↳ ดึงตอน:", $a.text().trim());
+    console.log("🔗 link:", epLink);
 
       const dataId = $a.attr("data-id");
 
