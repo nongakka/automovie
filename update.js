@@ -213,79 +213,93 @@ const res = await client.post(
 
     const servers = [];
 
-    const resPage = await client.get(epUrl);
-    const $ = cheerio.load(resPage.data);
+    // =====================
+    // โหลดหน้าเรื่อง
+    // =====================
+    const res = await client.get(epUrl);
+    const $ = cheerio.load(res.data);
 
-    // ⭐ ดึง cookie
-    const cookie = resPage.headers["set-cookie"]?.join("; ") || "";
+    const cookie =
+      res.headers["set-cookie"]?.join("; ") || "";
 
-    const buttons = $(".halim-btn");
+    const postId =
+      $(".halim-btn").first().attr("data-post-id");
 
-if(buttons.length === 0){
-  console.log("⚠️ ไม่พบ halim server");
-  return servers;
-}
+    if(!postId){
+      console.log("❌ ไม่พบ postId");
+      return servers;
+    }
 
-const postId = buttons.first().attr("data-post-id");
+    // =====================
+    // หา episode list
+    // =====================
+    const episodes =
+      $("select[name='Sequel_select'] option");
 
-for(let i=0;i<buttons.length;i++){
+    for(let i=0;i<episodes.length;i++){
 
-  const btn = buttons.eq(i);
+      const ep = episodes.eq(i);
 
-  const server = btn.attr("data-server");
-  const episode = btn.attr("data-episode");
-  const name = btn.text().trim();
+      const epName = ep.text().trim();
+      const epId = ep.attr("value");
 
-  if(!server || !episode) continue;
+      if(!epId) continue;
 
-  try{
+      console.log("↳ ดึงตอน:", epName, epId);
 
-    const res = await client.post(
-      "https://www.series-days.com/wp-admin/admin-ajax.php",
-      new URLSearchParams({
-        action: "halim_ajax_player",
-        post_id: postId,
-        server: server,
-        episode: episode
-      }),
-      {
-        headers:{
-          "Content-Type":"application/x-www-form-urlencoded",
-          "X-Requested-With":"XMLHttpRequest",
-          "User-Agent":"Mozilla/5.0",
-          "Referer": epUrl,
-          "Origin":"https://www.series-days.com",
-          "Cookie": cookie
-        }
+      try{
+
+        const resAjax = await client.post(
+          "https://www.series-days.com/wp-admin/admin-ajax.php",
+          new URLSearchParams({
+            action: "halim_ajax_player",
+            post_id: postId,
+            server: 1,
+            episode: epId
+          }),
+          {
+            headers:{
+              "Content-Type":
+              "application/x-www-form-urlencoded",
+              "X-Requested-With":
+              "XMLHttpRequest",
+              "Referer": epUrl,
+              "Origin":
+              "https://www.series-days.com",
+              "User-Agent": "Mozilla/5.0",
+              "Cookie": cookie
+            }
+          }
+        );
+
+        const $$ = cheerio.load(resAjax.data);
+
+        $$("iframe").each((j,el)=>{
+
+          let src = $$(el).attr("src");
+
+          if(!src) return;
+
+          if(src.startsWith("//")){
+            src = "https:"+src;
+          }
+
+          console.log("🎥 player:", src);
+
+          servers.push({
+            name: epName,
+            url: src
+          });
+
+        });
+
+      }catch(err){
+
+        console.log("⚠️ ajax error", epId);
+
       }
-    );
 
-    const $$ = cheerio.load(res.data);
-
-    $$("iframe").each((j,el)=>{
-
-      let src = $$(el).attr("src");
-
-      if(!src) return;
-
-      if(src.startsWith("//")){
-        src = "https:"+src;
-      }
-
-      console.log("🎥 player:", src);
-
-      servers.push({
-        name: name || `Server ${j+1}`,
-        url: src
-      });
-
-    });
-
-  }catch(err){
-    console.log("⚠️ ajax error", server);
-  }
-
-}
+    }
 
     return servers;
 
@@ -601,7 +615,7 @@ for (let page = startPage; page <= 999; page++) {
 
       if($a.text().includes("เลือก")) continue;
 
-        let epLink = $a.attr("value") || $a.attr("href");
+        let epLink = $a.attr("href") || link;
         if(!epLink) continue;
 
         epLink = normalizeUrl(epLink);
@@ -623,7 +637,7 @@ for (let page = startPage; page <= 999; page++) {
 
         try {
 
-          servers = await siteHandler.getServers(link);
+          servers = await siteHandler.getServers(epLink);
 
         } catch (err) {
 
