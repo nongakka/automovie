@@ -231,8 +231,7 @@ const res = await client.post(
 
       const server = btn.attr("data-server");
       const episode = btn.attr("data-episode");
-      const name = btn.text().trim();
-
+      
       if (!server || !episode) continue;
 
       try {
@@ -246,12 +245,14 @@ const res = await client.post(
             episode: episode
           }),
           {
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-              "X-Requested-With": "XMLHttpRequest",
-              "User-Agent": "Mozilla/5.0",
-              "Referer": epUrl
-            }
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+            "X-Requested-With": "XMLHttpRequest",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+            "Referer": epUrl,
+            "Origin": "https://www.series-days.com",
+            "Accept": "*/*"
+        }
           }
         );
 
@@ -268,17 +269,24 @@ const res = await client.post(
           }
 
           servers.push({
-            name: name || `Server ${j + 1}`,
+            name: `Server ${j + 1}`,
             url: src
           });
 
         });
 
-      } catch (err) {
+}catch (err) {
 
-        console.log("⚠️ ajax error", server);
+  console.log("⚠️ ajax error", server);
 
-      }
+  if(err.response){
+    console.log("status:", err.response.status);
+    console.log("data:", err.response.data?.slice(0,200));
+  }else{
+    console.log(err.message);
+  }
+
+}
 
     }
 
@@ -605,9 +613,9 @@ for (let page = startPage; page <= 999; page++) {
         epLink = new URL(epLink, cat.url).href;
         }
 
-        const domain = getDomain(epLink);
+        const siteDomain = getDomain(cat.url);
 
-        if (!epLink.includes(domain)) continue;
+        if (getDomain(epLink) !== siteDomain) continue;
 
         if (movie.episodes.find(x => x.link === epLink)) {
           console.log("⛔ ตอนซ้ำ หยุดเรื่อง");
