@@ -262,7 +262,7 @@ const res = await client.post(
   return servers;
 
 }
-
+},
 };
 
 // ==========================
