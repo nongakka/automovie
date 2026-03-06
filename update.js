@@ -123,13 +123,17 @@ async getServers(epUrl) {
 
     if (!id) continue;
 
-    const serverPage =
-      `https://goseries4k.com/?server=${id}`;
+    const serverPage = `https://goseries4k.com/ajax/server/${id}`;
 
     try {
 
-      const { data: serverHtml } =
-        await fetchWithRetry(serverPage);
+    const { data: serverHtml } =
+      await client.get(serverPage,{
+        headers:{
+          "X-Requested-With":"XMLHttpRequest",
+          "Referer":epUrl
+        }
+      });
 
       const $server = cheerio.load(serverHtml);
 
@@ -416,11 +420,6 @@ for (let page = startPage; page <= 150; page++) {
 
     finished = true;
 
-    fs.writeFileSync(
-      progressFile,
-      JSON.stringify({ page: page }, null, 2)
-    );
-
     break;
 
   }
@@ -479,10 +478,17 @@ for (let page = startPage; page <= 150; page++) {
 
         const $a = $detail(el2);
 
-        let epLink =
-          normalizeUrl($a.attr("href")) ||
-          normalizeUrl($a.attr("data-src")) ||
-          normalizeUrl($a.attr("data-id"));
+      let epLink =
+        normalizeUrl($a.attr("href")) ||
+        normalizeUrl($a.attr("data-src"));
+
+      const dataId = $a.attr("data-id");
+
+      if (!epLink && dataId) {
+        epLink = normalizeUrl(
+          `https://goseries4k.com/?episode=${dataId}`
+        );
+      }
 
         if (!epLink) continue;
 
