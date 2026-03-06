@@ -476,11 +476,11 @@ for (let page = startPage; page <= 150; page++) {
 
       for (const el2 of epElements) {
 
-        const $a = $detail(el2);
+        const $a = $detail(el2).find("a").first();
 
-      let epLink =
-        normalizeUrl($a.attr("href")) ||
-        normalizeUrl($a.attr("data-src"));
+        let epLink =
+          normalizeUrl($a.attr("href")) ||
+          normalizeUrl($a.attr("data-src"));
 
       const dataId = $a.attr("data-id");
 
