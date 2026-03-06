@@ -89,31 +89,73 @@ const SiteHandlers = {
       ".mp-ep-btn a"
     ],  
 
-      async getServers(epUrl) {
-      const { data } = await fetchWithRetry(epUrl);
-      const $ = cheerio.load(data);
+async getServers(epUrl) {
 
-      let servers = [];
+  const { data } = await fetchWithRetry(epUrl);
+  const $ = cheerio.load(data);
 
-      const main =
-        $("div.mpIframe iframe").attr("data-src") ||
-        $("div.mpIframe iframe").attr("src");
+  let servers = [];
 
-      if (main) servers.push({ name:"Main", url:main });
+  // iframe หลัก
+  const main =
+    $("div.mpIframe iframe").attr("data-src") ||
+    $("div.mpIframe iframe").attr("src");
 
-      $(".toolbar-item.mp-s-sl").each((i,el)=>{
-        const name=$(el).find(".item-text").text().trim();
-        const id=$(el).attr("data-id");
-        if (id) {
-          servers.push({
-            name: name || `Player ${i+1}`,
-            url: `https://goseries4k.com/?p=${id}`
-          });
-        }
-      });
+  if (main) {
+    servers.push({
+      name: "Main",
+      url: main
+    });
+  }
 
-      return servers;
+  // server list
+  const serverButtons = $(".toolbar-item.mp-s-sl");
+
+  for (let i = 0; i < serverButtons.length; i++) {
+
+    const el = serverButtons[i];
+
+    const name =
+      $(el).find(".item-text").text().trim() ||
+      `Player ${i+1}`;
+
+    const id = $(el).attr("data-id");
+
+    if (!id) continue;
+
+    const serverPage =
+      `https://goseries4k.com/?server=${id}`;
+
+    try {
+
+      const { data: serverHtml } =
+        await fetchWithRetry(serverPage);
+
+      const $server = cheerio.load(serverHtml);
+
+      const iframe =
+        $server("iframe").attr("src") ||
+        $server("iframe").attr("data-src");
+
+      if (iframe) {
+
+        servers.push({
+          name,
+          url: iframe
+        });
+
+      }
+
+    } catch (err) {
+
+      console.log("⚠️ server error:", id);
+
     }
+
+  }
+
+  return servers;
+}
   },
 
   // ======================
