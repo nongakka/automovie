@@ -213,22 +213,75 @@ const res = await client.post(
 
     const servers = [];
 
-    const res = await axios.get(epUrl,{
-      headers:{ "User-Agent":"Mozilla/5.0" }
+    const { data } = await fetchWithRetry(epUrl);
+    const $ = cheerio.load(data);
+
+    const buttons = $(".halim-btn");
+
+if(buttons.length === 0){
+  console.log("⚠️ ไม่พบ halim server");
+  return servers;
+}
+
+const postId = buttons.first().attr("data-post-id");
+
+for(let i=0;i<buttons.length;i++){
+
+  const btn = buttons.eq(i);
+
+  const server = btn.attr("data-server");
+  const episode = btn.attr("data-episode");
+  const name = btn.text().trim();
+
+  if(!server || !episode) continue;
+
+  try{
+
+    const res = await client.post(
+      "https://www.series-days.com/wp-admin/admin-ajax.php",
+      new URLSearchParams({
+        action: "halim_ajax_player",
+        post_id: postId,
+        server: server,
+        episode: episode
+      }),
+      {
+        headers:{
+          "Content-Type":"application/x-www-form-urlencoded",
+          "X-Requested-With":"XMLHttpRequest",
+          "User-Agent":"Mozilla/5.0",
+          "Referer": epUrl,
+          "Origin":"https://www.series-days.com"
+        }
+      }
+    );
+
+    const $$ = cheerio.load(res.data);
+
+    $$("iframe").each((j,el)=>{
+
+      let src = $$(el).attr("src");
+
+      if(!src) return;
+
+      if(src.startsWith("//")){
+        src = "https:"+src;
+      }
+
+      console.log("🎥 player:", src);
+
+      servers.push({
+        name: name || `Server ${j+1}`,
+        url: src
+      });
+
     });
 
-    const $ = cheerio.load(res.data);
+  }catch(err){
+    console.log("⚠️ ajax error", server);
+  }
 
-    const iframe = $("iframe").attr("src");
-
-    console.log("🎥 player:", iframe);
-    
-    if(iframe){
-      servers.push({
-        name:"embed",
-        url:iframe
-      });
-    }
+}
 
     return servers;
 
@@ -552,11 +605,7 @@ for (let page = startPage; page <= 999; page++) {
         if (epLink.startsWith("/")) {
         epLink = new URL(epLink, cat.url).href;
         }
-
-        const siteDomain = getDomain(cat.url);
-
-        if (getDomain(epLink) !== siteDomain) continue;
-
+       
         if (movie.episodes.find(x => x.link === epLink)) {
           console.log("⛔ ตอนซ้ำ หยุดเรื่อง");
           break;
