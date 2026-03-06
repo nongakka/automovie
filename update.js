@@ -107,7 +107,7 @@ const SiteHandlers = {
         if (id) {
           servers.push({
             name: name || `Player ${i+1}`,
-            url: `https://goseries4k.com/?server=${id}`
+            url: `https://goseries4k.com/?p=${id}`
           });
         }
       });
