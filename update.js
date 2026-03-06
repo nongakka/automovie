@@ -210,7 +210,7 @@ default: {
 
   episodeSelectors: [
   ".entry-content p a"
-  ]
+  ],
 
   async getServers(epUrl){
 
