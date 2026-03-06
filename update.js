@@ -81,8 +81,13 @@ const SiteHandlers = {
       "article",".movie-item",".post",".item",".anime-item",".-movie"
     ],
     episodeSelectors: [
-      "ul#MVP li a",".episode-list a",".ep a",".episodes a",".mp-ep-btn"
-    ],
+      "ul#MVP li a",
+      ".episode-list a",
+      ".ep a",
+      ".episodes a",
+      ".mp-ep-btn",
+      ".mp-ep-btn a"
+    ]
     async getServers(epUrl) {
       const { data } = await fetchWithRetry(epUrl);
       const $ = cheerio.load(data);
@@ -426,7 +431,11 @@ for (let page = startPage; page <= 150; page++) {
 
         const $a = $detail(el2);
 
-        let epLink = normalizeUrl($a.attr("href"));
+        let epLink =
+          normalizeUrl($a.attr("href")) ||
+          normalizeUrl($a.attr("data-src")) ||
+          normalizeUrl($a.attr("data-id"));
+
         if (!epLink) continue;
 
         if (movie.episodes.find(x => x.link === epLink)) {
