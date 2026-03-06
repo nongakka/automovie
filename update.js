@@ -85,7 +85,7 @@ const SiteHandlers = {
       "ul#MVP li",
       ".episode-list a",
       ".episodes a"
-    ]  
+    ],   
 
 async getServers(epUrl) {
 
@@ -439,12 +439,7 @@ for (let page = startPage; page <= 150; page++) {
 
       // ⭐ เพิ่มตรงนี้
       let movie = oldMap.get(link);
-
-      if (oldMap.has(link)) {
-        movie = oldMap.get(link);
-      }
       
-
       if (movie && movie.episodes && movie.episodes.length > 0) {
         console.log("⏭ ข้ามเรื่อง (มีแล้ว):", movie.title);
         continue;
@@ -473,7 +468,11 @@ for (let page = startPage; page <= 150; page++) {
 
   for (const el2 of epElements) {
 
-    const $a = $detail(el2).find("a").first();
+    let $a = $detail(el2);
+
+    if (!$a.is("a")) {
+        $a = $a.find("a").first();
+    }
 
     if (!$a.length) continue;
 
