@@ -4,42 +4,33 @@ on:
   workflow_dispatch:
 
   schedule:
-    # รันทุก 6 ชั่วโมง
     - cron: "0 */6 * * *"
 
 permissions:
   contents: write
-
-concurrency:
-  group: scraper
-  cancel-in-progress: false
 
 jobs:
   scrape:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
+
+      - name: Checkout repo
         uses: actions/checkout@v4
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: npm
 
-      - name: Install Dependencies
+      - name: Install dependencies
         run: npm install
 
-      - name: Run Category Scraper
-        run: node scraper-category.js
+      - name: Run scraper
+        run: npm run scrape:all
 
-      - name: Run Episodes Scraper
-        run: node episodes.js
-
-      - name: Run Players Scraper
-        run: node players.js
-
-      - name: Commit Updated Data
+      - name: Commit data update
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "actions@github.com"
@@ -49,6 +40,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No changes"
           else
-            git commit -m "auto update data $(date -u)"
+            git commit -m "auto update data"
             git push
           fi
