@@ -1,6 +1,7 @@
 const axios = require("axios")
 const cheerio = require("cheerio")
 const fs = require("fs")
+
 function sleep(ms){
     return new Promise(r=>setTimeout(r,ms))
 }
@@ -14,7 +15,6 @@ function loadProgress(category){
     }
 
     const data = JSON.parse(fs.readFileSync(file))
-
     return data.index || 0
 }
 
@@ -26,8 +26,17 @@ function saveProgress(category,index){
         `data/progress/episodes-${category}.json`,
         JSON.stringify({index},null,2)
     )
-
 }
+
+function atomicSave(path,data){
+
+    const temp = path+".tmp"
+
+    fs.writeFileSync(temp,JSON.stringify(data,null,2))
+
+    fs.renameSync(temp,path)
+}
+
 const categories = [
     "chinese",
     "korean",
@@ -40,13 +49,13 @@ const categories = [
 ]
 
 function getEpNumber(name){
-
     const n = name.match(/\d+/)
     return n ? parseInt(n[0]) : 0
-
 }
 
 async function scrapeEpisodes(category){
+
+    fs.mkdirSync("data/episodes",{recursive:true})
 
     const series = JSON.parse(
         fs.readFileSync(`data/series/series-${category}.json`)
@@ -54,28 +63,28 @@ async function scrapeEpisodes(category){
 
     let result = []
 
-	const file = `data/episodes/episodes-${category}.json`
+    const file = `data/episodes/episodes-${category}.json`
 
-	if(fs.existsSync(file)){
-    	result = JSON.parse(fs.readFileSync(file))
-	}
+    if(fs.existsSync(file)){
+        result = JSON.parse(fs.readFileSync(file))
+    }
 
     let startIndex = loadProgress(category)
 
     for(let i=startIndex;i<series.length;i++){
 
-    	const s = series[i]
+        const s = series[i]
 
         console.log("SERIES:",s.title)
 
         await sleep(800)
-        
-	try{
+
+        try{
 
             const res = await axios.get(s.link,{
-    		headers:{ "user-agent":"Mozilla/5.0" },
-    		timeout:15000
-	    })
+                headers:{ "user-agent":"Mozilla/5.0" },
+                timeout:15000
+            })
 
             const $ = cheerio.load(res.data)
 
@@ -89,11 +98,9 @@ async function scrapeEpisodes(category){
                 if(epLink){
 
                     episodes.push({
-
                         name: epName,
                         ep: getEpNumber(epName),
                         url: "https://www.series-days.com"+epLink
-
                     })
 
                 }
@@ -102,40 +109,30 @@ async function scrapeEpisodes(category){
 
             episodes.sort((a,b)=>a.ep-b.ep)
 
-	    if(episodes.length === 0){
-    		console.log("NO EPISODES:",s.title)
-	}
+            if(episodes.length === 0){
+                console.log("NO EPISODES:",s.title)
+            }
 
-result.push({
+            result.push({
+                title: s.title,
+                slug: s.slug,
+                image: s.image,
+                episodes
+            })
 
-    title: s.title,
-    slug: s.slug,
-    image: s.image,
-    episodes
+            // ✅ autosave
+            atomicSave(file,result)
 
-})
+            // ✅ save progress
+            saveProgress(category,i+1)
 
-fs.writeFileSync(
-    `data/episodes/episodes-${category}.json`,
-    JSON.stringify(result,null,2)
-)
-
-saveProgress(category,i+1)
-        
-	}catch(e){
+        }catch(e){
 
             console.log("ERROR:",s.title)
 
         }
 
     }
-
-    fs.mkdirSync("data/episodes",{recursive:true})
-
-    fs.writeFileSync(
-        `data/episodes/episodes-${category}.json`,
-        JSON.stringify(result,null,2)
-    )
 
     console.log("SAVE episodes-"+category+".json")
 
@@ -155,6 +152,4 @@ async function run(){
 
 }
 
-
 run()
-
