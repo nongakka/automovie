@@ -1,4 +1,4 @@
-name: SeriesDay Scraper
+name: SeriesDay Production Scraper
 
 on:
   workflow_dispatch:
@@ -9,13 +9,30 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: scraper
+  cancel-in-progress: false
+
 jobs:
-  scrape:
+
+  scrape-category:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        category:
+          - chinese
+          - korean
+          - japanese
+          - thai
+          - new
+          - y
+          - western
+          - netflix
 
     steps:
 
-      - name: Checkout repo
+      - name: Checkout Repo
         uses: actions/checkout@v4
 
       - name: Setup Node
@@ -24,13 +41,42 @@ jobs:
           node-version: 20
           cache: npm
 
-      - name: Install dependencies
+      - name: Install Dependencies
         run: npm install
 
-      - name: Run scraper
-        run: npm run scrape:all
+      - name: Run Category Scraper
+        run: node scraper-category.js ${{ matrix.category }}
 
-      - name: Commit data update
+      - name: Upload Data Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: data-${{ matrix.category }}
+          path: data
+
+  merge-data:
+
+    needs: scrape-category
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Download All Data
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Merge Data
+        run: |
+          mkdir -p data
+
+          cp -r artifacts/*/episodes/* data/episodes/ 2>/dev/null || true
+          cp -r artifacts/*/series/* data/series/ 2>/dev/null || true
+          cp -r artifacts/*/playlist/* data/playlist/ 2>/dev/null || true
+
+      - name: Commit Updates
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "actions@github.com"
@@ -40,6 +86,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No changes"
           else
-            git commit -m "auto update data"
+            git commit -m "auto update scraper data"
             git push
           fi
