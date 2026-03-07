@@ -113,8 +113,8 @@ async function scrapeCategory(name,url){
                         image,
                         category:name
                     })
-            }
-
+                }
+            })
             page++
             saveProgress(name,page)
             
@@ -177,6 +177,7 @@ async function run(){
 }
 
 run()
+
 
 
 
