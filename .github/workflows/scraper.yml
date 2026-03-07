@@ -43,7 +43,7 @@ jobs:
         run: npm install
 
       - name: Run Category Scraper
-        run: node scraper-category.js ${{ matrix.category }} test
+        run: node scraper-category.js ${{ matrix.category }}
 
       - name: Run Episodes Scraper
         run: node episodes.js ${{ matrix.category }}
