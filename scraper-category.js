@@ -38,7 +38,7 @@ function loadProgress(name){
         return 1
     }
 
-    const data = JSON.parse(fs.readFileSync(file))
+    const data = JSON.parse(fs.readFileSync(file,"utf8"))
 
     return data.page || 1
 }
@@ -63,7 +63,7 @@ async function scrapeCategory(name,url){
     const file = `data/series/series-${name}.json`
 
     if(fs.existsSync(file)){
-        list = JSON.parse(fs.readFileSync(file))
+        list = JSON.parse(fs.readFileSync(file,"utf8"))
     }
 
     while(true){
@@ -189,6 +189,7 @@ async function run(){
 }
 
 run()
+
 
 
 
