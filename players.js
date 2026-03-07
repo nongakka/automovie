@@ -17,7 +17,29 @@ const axiosClient = axios.create({
 function delay(ms){
     return new Promise(r=>setTimeout(r,ms));
 }
+function loadProgress(category){
 
+    const file = `data/progress/players-${category}.json`;
+
+    if(!fs.existsSync(file)){
+        return 0;
+    }
+
+    const data = JSON.parse(fs.readFileSync(file,"utf8"));
+
+    return data.index || 0;
+}
+
+function saveProgress(category,index){
+
+    fs.mkdirSync("data/progress",{recursive:true});
+
+    fs.writeFileSync(
+        `data/progress/players-${category}.json`,
+        JSON.stringify({index},null,2)
+    );
+
+}
 async function retry(fn, times=3){
     for(let i=0;i<times;i++){
         try{
@@ -151,6 +173,8 @@ async function scrapeEpisode(ep,i){
 
 async function run(){
 
+    fs.mkdirSync(OUTPUT_DIR,{recursive:true});
+
     const files = fs.readdirSync(EPISODES_DIR)
         .filter(f => f.endsWith(".json"));
 
@@ -164,51 +188,62 @@ async function run(){
         fs.readFileSync(`${EPISODES_DIR}/${file}`,"utf8")
     );
 
-    const result = [];
+        const category = file
+        .replace("episodes-","")
+        .replace(".json","");
 
-    const seriesList = isTest ? [data[0]] : data;
+let result = [];
 
-    for(const series of seriesList){
+const outputFile = `${OUTPUT_DIR}/${category}.json`;
 
+if(fs.existsSync(outputFile)){
+    result = JSON.parse(fs.readFileSync(outputFile,"utf8"));
+}
+    
+
+    let startIndex = loadProgress(category);
+    const seriesList = isTest ? (data[0] ? [data[0]] : []) : data;
+
+    for(let i=startIndex;i<seriesList.length;i++){
+
+        const series = seriesList[i];
+        let episodes = series.episodes || [];
         console.log("Series:",series.title);
+        console.log("Episodes:",episodes.length);
 
         const obj = {
             title:series.title,
             image:series.image || "",
             episodes:[]
         };
-
-        let episodes = series.episodes;
-
+     
         if(isTest){
-            episodes = [episodes[0]];
+            episodes = episodes[0] ? [episodes[0]] : [];
         }
 
    const results = [];
 
-   for(let i=0;i<episodes.length;i++){
+   for(let j=0;j<episodes.length;j++){
 
-      const ep = episodes[i];
+   const ep = episodes[j];
 
-      const r = await scrapeEpisode(ep,i);
+   const r = await scrapeEpisode(ep,j);
 
-      if(r) results.push(r);
+   if(r) results.push(r);
 
-   }
+}
 
 obj.episodes = results;
 
-        result.push(obj);
+result.push(obj);
 
+fs.writeFileSync(
+    outputFile,
+    JSON.stringify(result,null,2)
+);
+
+saveProgress(category,i+1);
     }
-
-    fs.mkdirSync(OUTPUT_DIR,{recursive:true});
-
-    const category = file
-        .replace("episodes-","")
-        .replace(".json","");
-
-    const outputFile = `${OUTPUT_DIR}/${category}.json`;
 
     fs.writeFileSync(
         outputFile,
@@ -218,5 +253,6 @@ obj.episodes = results;
     console.log("done ->",outputFile);
 }
 }
+
 
 run();
