@@ -1,13 +1,11 @@
-name: SeriesDay Production Scraper
+name: SeriesDay Scraper
 
 on:
   workflow_dispatch:
-
-  schedule:
-    - cron: "0 */6 * * *"
-
+  
 permissions:
   contents: write
+  actions: write
 
 concurrency:
   group: scraper
@@ -107,3 +105,11 @@ jobs:
             git commit -m "auto update scraper data"
             git push
           fi
+
+      - name: Re-run workflow before timeout
+        run: |
+          echo "Waiting before re-run..."
+          sleep 21000
+          gh workflow run "${{ github.workflow }}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
