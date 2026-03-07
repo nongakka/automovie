@@ -103,16 +103,17 @@ async function scrapeCategory(name,url){
                 const slug = getSlug(link)
 
                 if(!link || !title) return
+                const exists = list.find(x => x.slug === slug)
 
-                list.push({
-                    title,
-                    slug,
-                    link,
-                    image,
-                    category:name
-                })
-
-            })
+                if(!exists){
+                    list.push({
+                        title,
+                        slug,
+                        link,
+                        image,
+                        category:name
+                    })
+            }
 
             page++
             saveProgress(name,page)
@@ -176,6 +177,7 @@ async function run(){
 }
 
 run()
+
 
 
 
