@@ -14,7 +14,7 @@ const categories = {
     netflix: "https://www.series-days.com/netflix/"
 
 }
-
+const selectedCategory = process.argv[2]
 function getSlug(url){
 
     if(!url) return ""
@@ -113,6 +113,24 @@ async function scrapeCategory(name,url){
 
 async function run(){
 
+    // ถ้า GitHub Action ส่ง category มา
+    if(selectedCategory){
+
+        const url = categories[selectedCategory]
+
+        if(!url){
+
+            console.log("CATEGORY NOT FOUND:",selectedCategory)
+            return
+
+        }
+
+        await scrapeCategory(selectedCategory,url)
+
+        return
+    }
+
+    // ถ้า run local จะ scrape ทุก category
     for(const name in categories){
 
         console.log("START CATEGORY:",name)
