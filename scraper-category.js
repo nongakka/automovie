@@ -40,9 +40,21 @@ function loadProgress(name){
 
     return data.page || 1
 }
+
+function saveProgress(name,page){
+
+    fs.mkdirSync("data/progress",{recursive:true})
+
+    fs.writeFileSync(
+        `data/progress/${name}.json`,
+        JSON.stringify({page},null,2)
+    )
+
+}
+
 async function scrapeCategory(name,url){
 
-    let page = 1
+    let page = loadProgress(name)
     let list = []
 
     while(true){
@@ -96,7 +108,8 @@ async function scrapeCategory(name,url){
             })
 
             page++
-
+            saveProgress(name,page)
+            
             // ป้องกันโดน block
             await sleep(1000)
 
@@ -156,4 +169,5 @@ async function run(){
 }
 
 run()
+
 
