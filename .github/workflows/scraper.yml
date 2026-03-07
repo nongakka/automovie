@@ -56,9 +56,8 @@ jobs:
           git config --global user.name "github-actions"
           git config --global user.email "actions@github.com"
 
-          git pull --rebase
-
           git add data/series
+          git pull --rebase
 
           if git diff --cached --quiet; then
             echo "No series changes"
@@ -76,9 +75,8 @@ jobs:
 
       - name: Commit Episodes
         run: |
-          git pull --rebase
-
           git add data/episodes data/progress
+          git pull --rebase
 
           if git diff --cached --quiet; then
             echo "No episodes changes"
@@ -96,9 +94,8 @@ jobs:
 
       - name: Commit Playlist
         run: |
-          git pull --rebase
-
           git add data/playlist data/progress
+          git pull --rebase
 
           if git diff --cached --quiet; then
             echo "No playlist changes"
