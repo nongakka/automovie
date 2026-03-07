@@ -1,0 +1,53 @@
+[
+  {
+    "title": "Pursuit of Jade (2026) ล่าหยก",
+    "image": "https://www.series-days.com/wp-content/uploads/2026/03/Pursuit-of-Jade-2026-ล่าหยก-187x269.jpg",
+    "episodes": [
+      {
+        "name": "ตอนที่ 1",
+        "servers": [
+          {
+            "name": "Server 1",
+            "url": "https://main.24playerhd.com/m3u8/1963c981bf03472c6cebb383/1963c981bf03472c6cebb383438.m3u8"
+          }
+        ]
+      },
+      {
+        "name": "ตอนที่ 2",
+        "servers": [
+          {
+            "name": "Server 1",
+            "url": "https://main.24playerhd.com/m3u8/9341d584b159114b81a16adc/9341d584b159114b81a16adc438.m3u8"
+          }
+        ]
+      },
+      {
+        "name": "ตอนที่ 3",
+        "servers": [
+          {
+            "name": "Server 1",
+            "url": "https://main.24playerhd.com/m3u8/aa5ea71ca2eedb9a5c82a2a8/aa5ea71ca2eedb9a5c82a2a8438.m3u8"
+          }
+        ]
+      },
+      {
+        "name": "ตอนที่ 4",
+        "servers": [
+          {
+            "name": "Server 1",
+            "url": "https://main.24playerhd.com/m3u8/f4e409214fafb81563e90497/f4e409214fafb81563e90497438.m3u8"
+          }
+        ]
+      },
+      {
+        "name": "ตอนที่ 5",
+        "servers": [
+          {
+            "name": "Server 1",
+            "url": "https://main.24playerhd.com/m3u8/240f6d9bff828a80f7ecbb3a/240f6d9bff828a80f7ecbb3a438.m3u8"
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,62 @@
+[
+  {
+    "title": "Be My Angel (2026) ฉันหลงรักเทวดาของฉัน",
+    "image": "https://www.series-days.com/wp-content/uploads/2026/01/Be-My-Angel-2026-ฉันหลงรักเทวดาของฉัน-187x269.jpg",
+    "episodes": [
+      {
+        "name": "ตอนที่ 1",
+        "servers": [
+          {
+            "name": "Server 1",
+            "url": "https://main.24playerhd.com/m3u8/678cf366abb449b22e758623/678cf366abb449b22e758623438.m3u8"
+          }
+        ]
+      },
+      {
+        "name": "ตอนที่ 2",
+        "servers": [
+          {
+            "name": "Server 1",
+            "url": "https://main.24playerhd.com/m3u8/d13d24cd90887ea371aeb96c/d13d24cd90887ea371aeb96c438.m3u8"
+          }
+        ]
+      },
+      {
+        "name": "ตอนที่ 3",
+        "servers": [
+          {
+            "name": "Server 1",
+            "url": "https://main.24playerhd.com/m3u8/31733d4d775c9be38657a475/31733d4d775c9be38657a475438.m3u8"
+          }
+        ]
+      },
+      {
+        "name": "ตอนที่ 4",
+        "servers": [
+          {
+            "name": "Server 1",
+            "url": "https://main.24playerhd.com/m3u8/57f2cfcdaad8df7d54a930af/57f2cfcdaad8df7d54a930af438.m3u8"
+          }
+        ]
+      },
+      {
+        "name": "ตอนที่ 5",
+        "servers": [
+          {
+            "name": "Server 1",
+            "url": "https://main.24playerhd.com/m3u8/6a61e60828f585f4cffcf3d7/6a61e60828f585f4cffcf3d7438.m3u8"
+          }
+        ]
+      },
+      {
+        "name": "ตอนที่ 6",
+        "servers": [
+          {
+            "name": "Server 1",
+            "url": "https://main.24playerhd.com/m3u8/22bf348bd58cf39ce5274f0e/22bf348bd58cf39ce5274f0e438.m3u8"
+          }
+        ]
+      }
+    ]
+  }
+]
