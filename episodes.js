@@ -106,16 +106,21 @@ async function scrapeEpisodes(category){
     		console.log("NO EPISODES:",s.title)
 	}
 
-            result.push({
+result.push({
 
-                title: s.title,
-                slug: s.slug,
-                image: s.image,
-                episodes
+    title: s.title,
+    slug: s.slug,
+    image: s.image,
+    episodes
 
-            })
-		
-		saveProgress(category,i+1)
+})
+
+fs.writeFileSync(
+    `data/episodes/episodes-${category}.json`,
+    JSON.stringify(result,null,2)
+)
+
+saveProgress(category,i+1)
         
 	}catch(e){
 
@@ -152,3 +157,4 @@ async function run(){
 
 
 run()
+
