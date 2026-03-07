@@ -45,7 +45,7 @@ jobs:
         run: npm install
 
       - name: Run Category Scraper
-        run: node scraper-category.js test
+        run: node scraper-category.js ${{ matrix.category }} test
 
       - name: Upload Data Artifact
         uses: actions/upload-artifact@v4
