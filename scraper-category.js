@@ -55,7 +55,14 @@ function saveProgress(name,page){
 async function scrapeCategory(name,url){
 
     let page = loadProgress(name)
+
     let list = []
+
+    const file = `data/series/series-${name}.json`
+
+    if(fs.existsSync(file)){
+        list = JSON.parse(fs.readFileSync(file))
+    }
 
     while(true){
 
@@ -169,5 +176,6 @@ async function run(){
 }
 
 run()
+
 
 
