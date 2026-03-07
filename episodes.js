@@ -5,6 +5,29 @@ function sleep(ms){
     return new Promise(r=>setTimeout(r,ms))
 }
 
+function loadProgress(category){
+
+    const file = `data/progress/episodes-${category}.json`
+
+    if(!fs.existsSync(file)){
+        return 0
+    }
+
+    const data = JSON.parse(fs.readFileSync(file))
+
+    return data.index || 0
+}
+
+function saveProgress(category,index){
+
+    fs.mkdirSync("data/progress",{recursive:true})
+
+    fs.writeFileSync(
+        `data/progress/episodes-${category}.json`,
+        JSON.stringify({index},null,2)
+    )
+
+}
 const categories = [
     "chinese",
     "korean",
@@ -31,7 +54,17 @@ async function scrapeEpisodes(category){
 
     let result = []
 
-    for(const s of series){
+	const file = `data/episodes/episodes-${category}.json`
+
+	if(fs.existsSync(file)){
+    	result = JSON.parse(fs.readFileSync(file))
+	}
+
+    let startIndex = loadProgress(category)
+
+    for(let i=startIndex;i<series.length;i++){
+
+    	const s = series[i]
 
         console.log("SERIES:",s.title)
 
@@ -81,8 +114,10 @@ async function scrapeEpisodes(category){
                 episodes
 
             })
-
-        }catch(e){
+		
+		saveProgress(category,i+1)
+        
+	}catch(e){
 
             console.log("ERROR:",s.title)
 
@@ -114,5 +149,6 @@ async function run(){
     }
 
 }
+
 
 run()
