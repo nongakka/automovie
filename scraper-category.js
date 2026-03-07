@@ -15,6 +15,8 @@ const categories = {
 
 }
 const selectedCategory = process.argv[2]
+const isTest = process.argv.includes("test")
+
 function getSlug(url){
 
     if(!url) return ""
@@ -91,6 +93,10 @@ async function scrapeCategory(name,url){
 
             posts.each((i,el)=>{
 
+                if(isTest && list.length >= 1){
+                    return false
+                }
+
                 const link = $(el).find("a").attr("href")
 
                 const title = $(el).find(".p2").text().trim()
@@ -115,6 +121,12 @@ async function scrapeCategory(name,url){
                     })
                 }
             })
+            
+    if(isTest && list.length >= 1){
+        console.log("TEST MODE STOP:",name)
+            break
+    }
+            
             page++
             saveProgress(name,page)
             
@@ -177,6 +189,7 @@ async function run(){
 }
 
 run()
+
 
 
 
