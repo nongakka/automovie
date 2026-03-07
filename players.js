@@ -17,6 +17,17 @@ const axiosClient = axios.create({
 function delay(ms){
     return new Promise(r=>setTimeout(r,ms));
 }
+
+function atomicSave(path,data){
+
+    const temp = path + ".tmp";
+
+    fs.writeFileSync(temp, JSON.stringify(data,null,2));
+
+    fs.renameSync(temp, path);
+
+}
+
 function loadProgress(category){
 
     const file = `data/progress/players-${category}.json`;
@@ -40,6 +51,7 @@ function saveProgress(category,index){
     );
 
 }
+
 async function retry(fn, times=3){
     for(let i=0;i<times;i++){
         try{
@@ -174,6 +186,7 @@ async function scrapeEpisode(ep,i){
 async function run(){
 
     fs.mkdirSync(OUTPUT_DIR,{recursive:true});
+    fs.mkdirSync("data/progress",{recursive:true});
 
     const files = fs.readdirSync(EPISODES_DIR)
         .filter(f => f.endsWith(".json"));
@@ -182,77 +195,75 @@ async function run(){
     
     for(const file of files){
 
-    	console.log("CATEGORY:", file);
+        console.log("CATEGORY:", file);
 
-    	const data = JSON.parse(
-        fs.readFileSync(`${EPISODES_DIR}/${file}`,"utf8")
-    );
+        const data = JSON.parse(
+            fs.readFileSync(`${EPISODES_DIR}/${file}`,"utf8")
+        );
 
         const category = file
-        .replace("episodes-","")
-        .replace(".json","");
+            .replace("episodes-","")
+            .replace(".json","");
 
-let result = [];
+        let result = [];
 
-const outputFile = `${OUTPUT_DIR}/${category}.json`;
+        const outputFile = `${OUTPUT_DIR}/${category}.json`;
 
-if(fs.existsSync(outputFile)){
-    result = JSON.parse(fs.readFileSync(outputFile,"utf8"));
-}
-    
-
-    let startIndex = loadProgress(category);
-    const seriesList = isTest ? (data[0] ? [data[0]] : []) : data;
-
-    for(let i=startIndex;i<seriesList.length;i++){
-
-        const series = seriesList[i];
-        let episodes = series.episodes || [];
-        console.log("Series:",series.title);
-        console.log("Episodes:",episodes.length);
-
-        const obj = {
-            title:series.title,
-            image:series.image || "",
-            episodes:[]
-        };
-     
-        if(isTest){
-            episodes = episodes[0] ? [episodes[0]] : [];
+        if(fs.existsSync(outputFile)){
+            result = JSON.parse(fs.readFileSync(outputFile,"utf8"));
         }
 
-   const results = [];
+        let startIndex = loadProgress(category);
 
-   for(let j=0;j<episodes.length;j++){
+        const seriesList = isTest ? (data[0] ? [data[0]] : []) : data;
 
-   const ep = episodes[j];
+        for(let i=startIndex;i<seriesList.length;i++){
 
-   const r = await scrapeEpisode(ep,j);
+            const series = seriesList[i];
+            let episodes = series.episodes || [];
 
-   if(r) results.push(r);
+            console.log("Series:",series.title);
+            console.log("Episodes:",episodes.length);
 
-}
+            const obj = {
+                title:series.title,
+                image:series.image || "",
+                episodes:[]
+            };
+     
+            if(isTest){
+                episodes = episodes[0] ? [episodes[0]] : [];
+            }
 
-obj.episodes = results;
+            const results = [];
 
-result.push(obj);
+            for(let j=0;j<episodes.length;j++){
 
-fs.writeFileSync(
-    outputFile,
-    JSON.stringify(result,null,2)
-);
+                const ep = episodes[j];
 
-saveProgress(category,i+1);
+                const r = await scrapeEpisode(ep,j);
+
+                if(r) results.push(r);
+
+            }
+
+            obj.episodes = results;
+
+            result.push(obj);
+
+            // autosave ทุก series
+            atomicSave(outputFile,result);
+
+            // save progress
+            saveProgress(category,i+1);
+
+        }
+
+        atomicSave(outputFile,result);
+
+        console.log("done ->",outputFile);
     }
 
-    fs.writeFileSync(
-        outputFile,
-        JSON.stringify(result,null,2)
-    );
-
-    console.log("done ->",outputFile);
 }
-}
-
 
 run();
