@@ -28,7 +28,18 @@ function getSlug(url){
 function sleep(ms){
     return new Promise(r=>setTimeout(r,ms))
 }
+function loadProgress(name){
 
+    const file = `data/progress/${name}.json`
+
+    if(!fs.existsSync(file)){
+        return 1
+    }
+
+    const data = JSON.parse(fs.readFileSync(file))
+
+    return data.page || 1
+}
 async function scrapeCategory(name,url){
 
     let page = 1
@@ -145,3 +156,4 @@ async function run(){
 }
 
 run()
+
