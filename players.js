@@ -188,8 +188,14 @@ async function run(){
     fs.mkdirSync(OUTPUT_DIR,{recursive:true});
     fs.mkdirSync("data/progress",{recursive:true});
 
-    const files = fs.readdirSync(EPISODES_DIR)
-        .filter(f => f.endsWith(".json"));
+const selectedCategory = process.argv[2];
+
+let files = fs.readdirSync(EPISODES_DIR)
+    .filter(f => f.endsWith(".json"));
+console.log("FILES:", files);
+if(selectedCategory){
+    files = files.filter(f => f.includes(selectedCategory));
+}
 
     const isTest = process.argv.includes("test");
     
@@ -213,9 +219,11 @@ async function run(){
             result = JSON.parse(fs.readFileSync(outputFile,"utf8"));
         }
 
-        let startIndex = loadProgress(category);
+const seriesList = isTest ? (data[0] ? [data[0]] : []) : data;
 
-        const seriesList = isTest ? (data[0] ? [data[0]] : []) : data;
+let startIndex = loadProgress(category);
+
+console.log("START INDEX:",startIndex,"/",seriesList.length);
 
         for(let i=startIndex;i<seriesList.length;i++){
 
@@ -249,7 +257,11 @@ async function run(){
 
             obj.episodes = results;
 
-            result.push(obj);
+            const exists = result.find(x => x.title === obj.title);
+
+            if(!exists){
+                result.push(obj);
+            }
 
             // autosave ทุก series
             atomicSave(outputFile,result);
@@ -267,3 +279,4 @@ async function run(){
 }
 
 run();
+
