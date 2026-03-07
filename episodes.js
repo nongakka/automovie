@@ -1,7 +1,7 @@
 const axios = require("axios")
 const cheerio = require("cheerio")
 const fs = require("fs")
-
+const selectedCategory = process.argv[2]
 function sleep(ms){
     return new Promise(r=>setTimeout(r,ms))
 }
@@ -150,6 +150,14 @@ if(!Array.isArray(series) || series.length === 0){
 
 async function run(){
 
+    if(selectedCategory){
+
+        console.log("CATEGORY:",selectedCategory)
+        await scrapeEpisodes(selectedCategory)
+        return
+
+    }
+
     for(const category of categories){
 
         console.log("CATEGORY:",category)
@@ -163,4 +171,5 @@ async function run(){
 }
 
 run()
+
 
