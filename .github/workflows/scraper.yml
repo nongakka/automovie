@@ -50,6 +50,9 @@ jobs:
       - name: Run Episodes Scraper
         run: node episodes.js ${{ matrix.category }}
       
+      - name: Run Players Scraper
+        run: node players.js ${{ matrix.category }}
+      
       - name: Upload Data Artifact
         uses: actions/upload-artifact@v4
         with:
