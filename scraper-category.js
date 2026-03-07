@@ -60,10 +60,13 @@ async function scrapeCategory(name,url){
 
     let list = []
 
+    // ✅ สร้างโฟลเดอร์ก่อน
+    fs.mkdirSync("data/series",{recursive:true})
+
     const file = `data/series/series-${name}.json`
 
     if(fs.existsSync(file)){
-        list = JSON.parse(fs.readFileSync(file,"utf8"))
+    list = JSON.parse(fs.readFileSync(file,"utf8"))
     }
 
     while(true){
@@ -143,17 +146,15 @@ async function scrapeCategory(name,url){
 
     }
 
-    fs.mkdirSync("data/series",{recursive:true})
-
     fs.writeFileSync(
-        `data/series/series-${name}.json`,
-        JSON.stringify(list,null,2)
+    `data/series/series-${name}.json`,
+    JSON.stringify(list,null,2)
     )
 
     console.log("SAVE data/series/series-"+name+".json")
     console.log("TOTAL:",list.length)
 
-}
+    }
 
 async function run(){
 
@@ -189,6 +190,7 @@ async function run(){
 }
 
 run()
+
 
 
 
