@@ -57,10 +57,20 @@ async function scrapeEpisodes(category){
 
     fs.mkdirSync("data/episodes",{recursive:true})
 
-    const series = JSON.parse(
-        fs.readFileSync(`data/series/series-${category}.json`)
-    )
+const seriesFile = `data/series/series-${category}.json`
 
+if(!fs.existsSync(seriesFile)){
+    console.log("SKIP: series file not found ->",seriesFile)
+    return
+}
+
+const series = JSON.parse(
+    fs.readFileSync(seriesFile)
+)
+if(!Array.isArray(series) || series.length === 0){
+    console.log("NO SERIES DATA:",category)
+    return
+}
     let result = []
 
     const file = `data/episodes/episodes-${category}.json`
@@ -72,7 +82,7 @@ async function scrapeEpisodes(category){
     let startIndex = loadProgress(category)
 
     for(let i=startIndex;i<series.length;i++){
-
+    
         const s = series[i]
 
         console.log("SERIES:",s.title)
@@ -153,3 +163,4 @@ async function run(){
 }
 
 run()
+
