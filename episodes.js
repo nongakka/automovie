@@ -8,13 +8,13 @@ function sleep(ms){
 
 function loadProgress(category){
 
-    const file = `data/progress/episodes-${category}.json`
+    const file = `data/progress/episodes-progress-${category}.json`
 
     if(!fs.existsSync(file)){
         return 0
     }
 
-    const data = JSON.parse(fs.readFileSync(file))
+    const data = JSON.parse(fs.readFileSync(file,"utf8"))
     return data.index || 0
 }
 
@@ -23,7 +23,7 @@ function saveProgress(category,index){
     fs.mkdirSync("data/progress",{recursive:true})
 
     fs.writeFileSync(
-        `data/progress/episodes-${category}.json`,
+        `data/progress/episodes-progress-${category}.json`,
         JSON.stringify({index},null,2)
     )
 }
@@ -65,7 +65,7 @@ if(!fs.existsSync(seriesFile)){
 }
 
 const series = JSON.parse(
-    fs.readFileSync(seriesFile)
+    fs.readFileSync(seriesFile,"utf8")
 )
 if(!Array.isArray(series) || series.length === 0){
     console.log("NO SERIES DATA:",category)
@@ -76,11 +76,11 @@ if(!Array.isArray(series) || series.length === 0){
     const file = `data/episodes/episodes-${category}.json`
 
     if(fs.existsSync(file)){
-        result = JSON.parse(fs.readFileSync(file))
+        result = JSON.parse(fs.readFileSync(file,"utf8"))
     }
 
     let startIndex = loadProgress(category)
-
+    console.log("START INDEX:",startIndex,"/",series.length)
     for(let i=startIndex;i<series.length;i++){
     
         const s = series[i]
@@ -123,12 +123,18 @@ if(!Array.isArray(series) || series.length === 0){
                 console.log("NO EPISODES:",s.title)
             }
 
-            result.push({
-                title: s.title,
-                slug: s.slug,
-                image: s.image,
-                episodes
-            })
+const exists = result.find(x => x.slug === s.slug)
+
+if(!exists){
+
+    result.push({
+        title: s.title,
+        slug: s.slug,
+        image: s.image,
+        episodes
+    })
+
+}
 
             // ✅ autosave
             atomicSave(file,result)
@@ -136,15 +142,16 @@ if(!Array.isArray(series) || series.length === 0){
             // ✅ save progress
             saveProgress(category,i+1)
 
-        }catch(e){
+}catch(e){
 
-            console.log("ERROR:",s.title)
+    console.log("ERROR:",s.title)
+    console.log(e.message)
 
-        }
+}
 
     }
 
-    console.log("SAVE episodes-"+category+".json")
+    console.log("SAVE episodes-"+category+".json","TOTAL:",result.length)
 
 }
 
@@ -171,5 +178,6 @@ async function run(){
 }
 
 run()
+
 
 
