@@ -87,10 +87,10 @@ jobs:
           mkdir -p data/playlist
           mkdir -p data/progress
 
-          cp -r artifacts/*/episodes/* data/episodes/ 2>/dev/null || true
-          cp -r artifacts/*/series/* data/series/ 2>/dev/null || true
-          cp -r artifacts/*/playlist/* data/playlist/ 2>/dev/null || true
-          cp -r artifacts/*/progress/* data/progress/ 2>/dev/null || true
+          cp -r artifacts/*/data/episodes/* data/episodes/ 2>/dev/null || true
+          cp -r artifacts/*/data/series/* data/series/ 2>/dev/null || true
+          cp -r artifacts/*/data/playlist/* data/playlist/ 2>/dev/null || true
+          cp -r artifacts/*/data/progress/* data/progress/ 2>/dev/null || true
 
       - name: Commit Updates
         run: |
