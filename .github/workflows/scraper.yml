@@ -56,14 +56,15 @@ jobs:
           git config --global user.name "github-actions"
           git config --global user.email "actions@github.com"
 
+          git pull --rebase origin main
+
           git add data/series
 
           if git diff --cached --quiet; then
             echo "No series changes"
           else
             git commit -m "update series ${{ matrix.category }}"
-            git pull --rebase
-            git push || (sleep 5 && git pull --rebase && git push)
+            git push
           fi
 
       # -------------------
@@ -75,14 +76,15 @@ jobs:
 
       - name: Commit Episodes
         run: |
+          git pull --rebase origin main
+
           git add data/episodes data/progress
 
           if git diff --cached --quiet; then
             echo "No episodes changes"
           else
             git commit -m "update episodes ${{ matrix.category }}"
-            git pull --rebase
-            git push || (sleep 5 && git pull --rebase && git push)
+            git push
           fi
 
       # -------------------
@@ -94,15 +96,16 @@ jobs:
 
       - name: Commit Playlist
         run: |
-            git add data/playlist data/progress
+          git pull --rebase origin main
 
-            if git diff --cached --quiet; then
-              echo "No playlist changes"
-            else
-              git commit -m "update playlist ${{ matrix.category }}"
-              git pull --rebase
-              git push || (sleep 5 && git pull --rebase && git push)
-            fi  
+          git add data/playlist data/progress
+
+          if git diff --cached --quiet; then
+            echo "No playlist changes"
+          else
+            git commit -m "update playlist ${{ matrix.category }}"
+            git push
+          fi  
 
       - name: Install GitHub CLI
         run: sudo apt-get update && sudo apt-get install gh -y
