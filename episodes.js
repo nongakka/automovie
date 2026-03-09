@@ -1,9 +1,30 @@
 const axios = require("axios")
 const cheerio = require("cheerio")
 const fs = require("fs")
+const { execSync } = require("child_process")
+
 const selectedCategory = process.argv[2]
+
 function sleep(ms){
     return new Promise(r=>setTimeout(r,ms))
+}
+
+function gitCommit(message){
+
+    try{
+
+        execSync("git add data",{stdio:"ignore"})
+        execSync(`git commit -m "${message}"`,{stdio:"ignore"})
+        execSync("git push",{stdio:"ignore"})
+
+        console.log("GIT COMMIT:",message)
+
+    }catch(e){
+
+        console.log("GIT SKIP")
+
+    }
+
 }
 
 function loadProgress(category){
@@ -140,8 +161,10 @@ if(!exists){
             atomicSave(file,result)
 
             // ✅ save progress
-            saveProgress(category,i+1)
-
+    saveProgress(category,i+1)
+    if((i+1) % 5 === 0){
+        gitCommit(`episodes ${category} ${i+1}`)
+}
 }catch(e){
 
     console.log("ERROR:",s.title)
@@ -178,6 +201,7 @@ async function run(){
 }
 
 run()
+
 
 
 
