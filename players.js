@@ -1,7 +1,7 @@
 const fs = require("fs");
 const axios = require("axios");
 const cheerio = require("cheerio");
-
+const { execSync } = require("child_process");
 const EPISODES_DIR = "./data/episodes";
 const OUTPUT_DIR = "./data/playlist";
 
@@ -16,6 +16,24 @@ const axiosClient = axios.create({
 
 function delay(ms){
     return new Promise(r=>setTimeout(r,ms));
+}
+
+function gitCommit(message){
+
+    try{
+
+        execSync("git add data",{stdio:"ignore"})
+        execSync(`git commit -m "${message}"`,{stdio:"ignore"})
+        execSync("git push",{stdio:"ignore"})
+
+        console.log("GIT COMMIT:",message)
+
+    }catch(e){
+
+        console.log("GIT SKIP")
+
+    }
+
 }
 
 function atomicSave(path,data){
@@ -191,8 +209,10 @@ async function run(){
 const selectedCategory = process.argv[2];
 
 let files = fs.readdirSync(EPISODES_DIR)
-    .filter(f => f.endsWith(".json"));
+    .filter(f => f.endsWith(".json"))
+    .sort();
 console.log("FILES:", files);
+
 if(selectedCategory){
     files = files.filter(f => f.includes(selectedCategory));
 }
@@ -200,9 +220,7 @@ if(selectedCategory){
     const isTest = process.argv.includes("test");
     
     for(const file of files){
-
-        console.log("CATEGORY:", file);
-
+        
         const data = JSON.parse(
             fs.readFileSync(`${EPISODES_DIR}/${file}`,"utf8")
         );
@@ -210,7 +228,7 @@ if(selectedCategory){
         const category = file
             .replace("episodes-","")
             .replace(".json","");
-
+console.log("CATEGORY:", category);
         let result = [];
 
         const outputFile = `${OUTPUT_DIR}/${category}.json`;
@@ -268,7 +286,10 @@ console.log("START INDEX:",startIndex,"/",seriesList.length);
 
             // save progress
             saveProgress(category,i+1);
-
+            
+            if((i+1) % 5 === 0){
+            gitCommit(`playlist ${category} ${i+1}`);
+            }
         }
 
         atomicSave(outputFile,result);
@@ -279,4 +300,5 @@ console.log("START INDEX:",startIndex,"/",seriesList.length);
 }
 
 run();
+
 
