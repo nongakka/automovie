@@ -15,19 +15,6 @@ jobs:
   scrape:
     runs-on: ubuntu-latest
 
-    strategy:
-      max-parallel: 4
-      matrix:
-        category:
-          - chinese
-          - korean
-          - japanese
-          - thai
-          - new
-          - y
-          - western
-          - netflix
-
     steps:
 
       - name: Checkout Repo
@@ -49,7 +36,7 @@ jobs:
       # -------------------
 
       - name: Run Series Scraper
-        run: node scraper-category.js ${{ matrix.category }}
+        run: node scraper-category.js
 
       - name: Commit Series
         run: |
@@ -65,7 +52,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "No series changes"
           else
-            git commit -m "update series ${{ matrix.category }}"
+            git commit -m "update series"
             git push
           fi
 
@@ -74,7 +61,7 @@ jobs:
       # -------------------
 
       - name: Run Episodes Scraper
-        run: node episodes.js ${{ matrix.category }}
+        run: node episodes.js
 
       - name: Commit Episodes
         run: |
@@ -87,7 +74,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "No episodes changes"
           else
-            git commit -m "update episodes ${{ matrix.category }}"
+            git commit -m "update episodes"
             git push
           fi
 
@@ -96,7 +83,7 @@ jobs:
       # -------------------
 
       - name: Run Players Scraper
-        run: node players.js ${{ matrix.category }}
+        run: node players.js
 
       - name: Commit Playlist
         run: |
@@ -109,7 +96,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "No playlist changes"
           else
-            git commit -m "update playlist ${{ matrix.category }}"
+            git commit -m "update playlist"
             git push
           fi  
 
