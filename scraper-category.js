@@ -153,18 +153,16 @@ async function scrapeCategory(name,url){
     }
             
     page++
-    saveProgress(name,page)
+saveProgress(name,page)
 
-    if(page % 5 === 0){
-
-    gitCommit(`update ${name} page ${page}`)
-
-}
-    
-    fs.writeFileSync(
-    `data/series/series-${name}.json`,
-    JSON.stringify(list,null,2)
+fs.writeFileSync(
+`data/series/series-${name}.json`,
+JSON.stringify(list,null,2)
 )
+
+if(page % 5 === 0){
+    gitCommit(`update ${name} page ${page}`)
+}
             // ป้องกันโดน block
             await sleep(1000)
 
@@ -230,6 +228,7 @@ async function run(){
 }
 
 run()
+
 
 
 
