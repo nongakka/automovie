@@ -1,7 +1,7 @@
 const axios = require("axios")
 const cheerio = require("cheerio")
 const fs = require("fs")
-
+const { execSync } = require("child_process")
 const categories = {
 
     chinese: "https://www.series-days.com/ซีรี่ย์จีน/",
@@ -30,6 +30,24 @@ function getSlug(url){
 function sleep(ms){
     return new Promise(r=>setTimeout(r,ms))
 }
+
+function gitCommit(message){
+
+    try{
+
+        execSync("git add data", {stdio:"ignore"})
+        execSync(`git commit -m "${message}"`, {stdio:"ignore"})
+        execSync("git push", {stdio:"ignore"})
+
+        console.log("GIT COMMIT:",message)
+
+    }catch(e){
+
+        console.log("GIT SKIP")
+
+    }
+
+}
 function loadProgress(name){
 
     const file = `data/progress/${name}.json`
@@ -48,9 +66,13 @@ function saveProgress(name,page){
     fs.mkdirSync("data/progress",{recursive:true})
 
     fs.writeFileSync(
-        `data/progress/${name}.json`,
-        JSON.stringify({page},null,2)
-    )
+    `data/progress/${name}.json`,
+    JSON.stringify({
+        category:name,
+        page:page,
+        updated: Date.now()
+    },null,2)
+)
 
 }
 
@@ -130,9 +152,19 @@ async function scrapeCategory(name,url){
             break
     }
             
-            page++
-            saveProgress(name,page)
-            
+    page++
+    saveProgress(name,page)
+
+    if(page % 5 === 0){
+
+    gitCommit(`update ${name} page ${page}`)
+
+}
+    
+    fs.writeFileSync(
+    `data/series/series-${name}.json`,
+    JSON.stringify(list,null,2)
+)
             // ป้องกันโดน block
             await sleep(1000)
 
@@ -178,18 +210,27 @@ async function run(){
     // ถ้า run local จะ scrape ทุก category
     for(const name in categories){
 
-        console.log("START CATEGORY:",name)
+    console.log("START CATEGORY:",name)
+
+    try{
 
         await scrapeCategory(name,categories[name])
 
-        console.log("DONE CATEGORY:",name)
-        console.log("-------------------------")
+    }catch(e){
+
+        console.log("CATEGORY ERROR:",name)
 
     }
+
+    console.log("DONE CATEGORY:",name)
+    console.log("-------------------------")
+
+}
 
 }
 
 run()
+
 
 
 
