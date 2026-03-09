@@ -3747,5 +3747,195 @@
         "url": "https://www.series-days.com/star-wars-skeleton-crew-ep-8/"
       }
     ]
+  },
+  {
+    "title": "On Call (2025)",
+    "slug": "on-call",
+    "image": "https://www.series-days.com/wp-content/uploads/2025/01/On-Call-2025-187x269.jpg",
+    "episodes": [
+      {
+        "name": "ตอนที่ 1",
+        "ep": 1,
+        "url": "https://www.series-days.com/on-call-ep-1/"
+      },
+      {
+        "name": "ตอนที่ 2",
+        "ep": 2,
+        "url": "https://www.series-days.com/on-call-ep-2/"
+      },
+      {
+        "name": "ตอนที่ 3",
+        "ep": 3,
+        "url": "https://www.series-days.com/on-call-ep-3/"
+      },
+      {
+        "name": "ตอนที่ 4",
+        "ep": 4,
+        "url": "https://www.series-days.com/on-call-ep-4/"
+      },
+      {
+        "name": "ตอนที่ 5",
+        "ep": 5,
+        "url": "https://www.series-days.com/on-call-ep-5/"
+      },
+      {
+        "name": "ตอนที่ 6",
+        "ep": 6,
+        "url": "https://www.series-days.com/on-call-ep-6/"
+      },
+      {
+        "name": "ตอนที่ 7",
+        "ep": 7,
+        "url": "https://www.series-days.com/on-call-ep-7/"
+      },
+      {
+        "name": "ตอนที่ 8",
+        "ep": 8,
+        "url": "https://www.series-days.com/on-call-ep-8/"
+      }
+    ]
+  },
+  {
+    "title": "American Primeval (2025) อเมริกาแดนเถื่อน",
+    "slug": "american-primeval",
+    "image": "https://www.series-days.com/wp-content/uploads/2025/01/American-Primeval-2025-187x269.jpg",
+    "episodes": [
+      {
+        "name": "ตอนที่ 1",
+        "ep": 1,
+        "url": "https://www.series-days.com/american-primeval-ep-1/"
+      },
+      {
+        "name": "ตอนที่ 2",
+        "ep": 2,
+        "url": "https://www.series-days.com/american-primeval-ep-2/"
+      },
+      {
+        "name": "ตอนที่ 3",
+        "ep": 3,
+        "url": "https://www.series-days.com/american-primeval-ep-3/"
+      },
+      {
+        "name": "ตอนที่ 4",
+        "ep": 4,
+        "url": "https://www.series-days.com/american-primeval-ep-4/"
+      },
+      {
+        "name": "ตอนที่ 5",
+        "ep": 5,
+        "url": "https://www.series-days.com/american-primeval-ep-5/"
+      },
+      {
+        "name": "ตอนที่ 6",
+        "ep": 6,
+        "url": "https://www.series-days.com/american-primeval-ep-6/"
+      }
+    ]
+  },
+  {
+    "title": "The Walking Dead: The Ones Who Live (2024)",
+    "slug": "the-ones-who-live",
+    "image": "https://www.series-days.com/wp-content/uploads/2025/01/The-Ones-Who-Live-2024-187x269.jpg",
+    "episodes": [
+      {
+        "name": "ตอนที่ 1",
+        "ep": 1,
+        "url": "https://www.series-days.com/the-ones-who-live-ep-1/"
+      },
+      {
+        "name": "ตอนที่ 2",
+        "ep": 2,
+        "url": "https://www.series-days.com/the-ones-who-live-ep-2/"
+      },
+      {
+        "name": "ตอนที่ 3",
+        "ep": 3,
+        "url": "https://www.series-days.com/the-ones-who-live-ep-3/"
+      },
+      {
+        "name": "ตอนที่ 4",
+        "ep": 4,
+        "url": "https://www.series-days.com/the-ones-who-live-ep-4/"
+      },
+      {
+        "name": "ตอนที่ 5",
+        "ep": 5,
+        "url": "https://www.series-days.com/the-ones-who-live-ep-5/"
+      },
+      {
+        "name": "ตอนที่ 6",
+        "ep": 6,
+        "url": "https://www.series-days.com/the-ones-who-live-ep-6/"
+      }
+    ]
+  },
+  {
+    "title": "Missing You (2025) ลวง",
+    "slug": "missing-you",
+    "image": "https://www.series-days.com/wp-content/uploads/2025/01/Missing-You-2025-187x269.jpg",
+    "episodes": [
+      {
+        "name": "ตอนที่ 1",
+        "ep": 1,
+        "url": "https://www.series-days.com/missing-you-ep-1/"
+      },
+      {
+        "name": "ตอนที่ 2",
+        "ep": 2,
+        "url": "https://www.series-days.com/missing-you-ep-2/"
+      },
+      {
+        "name": "ตอนที่ 3",
+        "ep": 3,
+        "url": "https://www.series-days.com/missing-you-ep-3/"
+      },
+      {
+        "name": "ตอนที่ 4",
+        "ep": 4,
+        "url": "https://www.series-days.com/missing-you-ep-4/"
+      },
+      {
+        "name": "ตอนที่ 5",
+        "ep": 5,
+        "url": "https://www.series-days.com/missing-you-ep-5/"
+      }
+    ]
+  },
+  {
+    "title": "Dune: Prophecy (2024) ดูน คำพยากรณ์แห่งทราย",
+    "slug": "dune-prophecy",
+    "image": "https://www.series-days.com/wp-content/uploads/2024/11/Dune-Prophecy-2024-187x269.jpg",
+    "episodes": [
+      {
+        "name": "ตอนที่ 1",
+        "ep": 1,
+        "url": "https://www.series-days.com/dune-prophecy-ep-1/"
+      },
+      {
+        "name": "ตอนที่ 2",
+        "ep": 2,
+        "url": "https://www.series-days.com/dune-prophecy-ep-2/"
+      },
+      {
+        "name": "ตอนที่ 3",
+        "ep": 3,
+        "url": "https://www.series-days.com/dune-prophecy-ep-3/"
+      },
+      {
+        "name": "ตอนที่ 4",
+        "ep": 4,
+        "url": "https://www.series-days.com/dune-prophecy-ep-4/"
+      },
+      {
+        "name": "ตอนที่ 5",
+        "ep": 5,
+        "url": "https://www.series-days.com/dune-prophecy-ep-5/"
+      },
+      {
+        "name": "ตอนที่ 6",
+        "ep": 6,
+        "url": "https://www.series-days.com/dune-prophecy-ep-6/"
+      }
+    ]
   }
 ]
