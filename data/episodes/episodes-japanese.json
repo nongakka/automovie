@@ -9138,5 +9138,104 @@
         "url": "https://www.series-days.com/cooking-for-the-maiko-house-ep-9/"
       }
     ]
+  },
+  {
+    "title": "Gannibal (2022)",
+    "slug": "gannibal",
+    "image": "https://www.series-days.com/wp-content/uploads/2023/02/Gannibal-2022-187x269.jpg",
+    "episodes": [
+      {
+        "name": "ตอนที่ 1",
+        "ep": 1,
+        "url": "https://www.series-days.com/gannibal-ep-1/"
+      },
+      {
+        "name": "ตอนที่ 2",
+        "ep": 2,
+        "url": "https://www.series-days.com/gannibal-ep-2/"
+      },
+      {
+        "name": "ตอนที่ 3",
+        "ep": 3,
+        "url": "https://www.series-days.com/gannibal-ep-3/"
+      },
+      {
+        "name": "ตอนที่ 4",
+        "ep": 4,
+        "url": "https://www.series-days.com/gannibal-ep-4/"
+      },
+      {
+        "name": "ตอนที่ 5",
+        "ep": 5,
+        "url": "https://www.series-days.com/gannibal-ep-5/"
+      },
+      {
+        "name": "ตอนที่ 6",
+        "ep": 6,
+        "url": "https://www.series-days.com/gannibal-ep-6/"
+      },
+      {
+        "name": "ตอนที่ 7",
+        "ep": 7,
+        "url": "https://www.series-days.com/gannibal-ep-7/"
+      }
+    ]
+  },
+  {
+    "title": "A2Z (2023)",
+    "slug": "a2z",
+    "image": "https://www.series-days.com/wp-content/uploads/2023/02/A2Z-2023-187x269.jpg",
+    "episodes": [
+      {
+        "name": "ตอนที่ 1",
+        "ep": 1,
+        "url": "https://www.series-days.com/a2z-ep-1/"
+      },
+      {
+        "name": "ตอนที่ 2",
+        "ep": 2,
+        "url": "https://www.series-days.com/a2z-ep-2/"
+      },
+      {
+        "name": "ตอนที่ 3",
+        "ep": 3,
+        "url": "https://www.series-days.com/a2z-ep-3/"
+      },
+      {
+        "name": "ตอนที่ 4",
+        "ep": 4,
+        "url": "https://www.series-days.com/a2z-ep-4/"
+      },
+      {
+        "name": "ตอนที่ 5",
+        "ep": 5,
+        "url": "https://www.series-days.com/a2z-ep-5/"
+      },
+      {
+        "name": "ตอนที่ 6",
+        "ep": 6,
+        "url": "https://www.series-days.com/a2z-ep-6/"
+      },
+      {
+        "name": "ตอนที่ 7",
+        "ep": 7,
+        "url": "https://www.series-days.com/a2z-ep-7/"
+      },
+      {
+        "name": "ตอนที่ 8",
+        "ep": 8,
+        "url": "https://www.series-days.com/a2z-ep-8/"
+      },
+      {
+        "name": "ตอนที่ 9",
+        "ep": 9,
+        "url": "https://www.series-days.com/a2z-ep-9/"
+      },
+      {
+        "name": "ตอนที่ 10",
+        "ep": 10,
+        "url": "https://www.series-days.com/a2z-ep-10/"
+      }
+    ]
   }
 ]
