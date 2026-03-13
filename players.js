@@ -279,6 +279,8 @@ console.log("START INDEX:",startIndex,"/",seriesList.length);
 
             if(!exists){
                 result.push(obj);
+            }else{
+                exists.episodes = obj.episodes;
             }
 
             // autosave ทุก series
@@ -300,5 +302,6 @@ console.log("START INDEX:",startIndex,"/",seriesList.length);
 }
 
 run();
+
 
 
