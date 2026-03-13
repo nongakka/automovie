@@ -11,8 +11,13 @@ const categories = {
     new: "https://www.series-days.com/ซีรี่ย์ใหม่-2025/",
     y: "https://www.series-days.com/ซีรี่ย์วาย/",
     western: "https://www.series-days.com/ซีรี่ย์ฝรั่ง/",
-    netflix: "https://www.series-days.com/netflix/"
-
+    netflix: "https://www.series-days.com/netflix/",
+    wetv: "https://www.series-days.com/wetv/",
+    iqiyi: "https://www.series-days.com/iqiyi/",
+    youku: "https://www.series-days.com/youku/",
+    viu: "https://www.series-days.com/viu/",
+    hbo: "https://www.series-days.com/hbo/"
+    
 }
 const selectedCategory = process.argv[2]
 const isTest = process.argv.includes("test")
@@ -228,6 +233,7 @@ async function run(){
 }
 
 run()
+
 
 
 
