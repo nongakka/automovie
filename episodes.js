@@ -155,6 +155,10 @@ if(!exists){
         episodes
     })
 
+}else{
+
+    exists.episodes = episodes
+
 }
 
             // ✅ autosave
@@ -201,6 +205,7 @@ async function run(){
 }
 
 run()
+
 
 
 
