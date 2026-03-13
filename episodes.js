@@ -66,7 +66,12 @@ const categories = [
     "new",
     "y",
     "western",
-    "netflix"
+    "netflix",
+    "wetv",
+    "iqiyi",
+    "youku",
+    "viu",
+    "hbo"
 ]
 
 function getEpNumber(name){
@@ -211,6 +216,7 @@ async function run(){
 }
 
 run()
+
 
 
 
