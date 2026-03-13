@@ -85,6 +85,8 @@ async function scrapeCategory(name,url){
 
     let page = loadProgress(name)
 
+     if(page > 50) page = 1
+
     let list = []
 
     // ✅ สร้างโฟลเดอร์ก่อน
@@ -233,6 +235,7 @@ async function run(){
 }
 
 run()
+
 
 
 
