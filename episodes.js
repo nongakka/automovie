@@ -101,7 +101,13 @@ if(!Array.isArray(series) || series.length === 0){
     }
 
     let startIndex = loadProgress(category)
-    console.log("START INDEX:",startIndex,"/",series.length)
+
+if(startIndex >= series.length){
+    startIndex = 0
+}
+
+console.log("START INDEX:",startIndex,"/",series.length)
+    
     for(let i=startIndex;i<series.length;i++){
     
         const s = series[i]
@@ -205,6 +211,7 @@ async function run(){
 }
 
 run()
+
 
 
 
